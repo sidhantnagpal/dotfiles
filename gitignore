@@ -1,0 +1,35 @@
+# Mac OS X Junk
+.DS_Store
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+.ipynb_checkpoints
+
+# ctags config
+.ctags
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Generated files
+bin/
+gen/
+out/
+

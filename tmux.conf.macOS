@@ -1,0 +1,57 @@
+# remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# Enable mouse mode (tmux 2.1 and above)
+set -g mouse on
+
+# force a reload of the config file
+unbind r
+bind r source-file ~/.tmux.conf
+
+# for copying, if already in copy mode, typing 'y' will yank the selection to clipboard
+# if not in copy mode, it would require 'C-a y' combination for yanking.
+# for pasting from tmux buffer use 'C-a p'
+# else normal paste if contents are on system clipboard.
+
+# use vi mode
+setw -g mode-keys vi
+set -g status-keys vi
+
+# don't exit after mouse selection, https://github.com/tmux/tmux/issues/140#issuecomment-474341833
+unbind -T copy-mode-vi MouseDragEnd1Pane
+bind-key -T copy-mode-vi MouseDown1Pane select-pane\; send-keys -X clear-selection
+bind -n MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= \"#{pane_in_mode}\" \"copy-mode -eM\" \"send-keys -M\"' 'copy-mode -eM'
+
+# vim style copy paste mode, see https://github.com/xero/dotfiles/blob/master/tmux/.tmux.conf
+#unbind [
+#bind Escape copy-mode
+unbind p
+bind p paste-buffer
+bind-key -T copy-mode-vi v send -X begin-selection
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'pbcopy' # 'xclip -in -selection clipboard'
+
+# don't rename windows automatically
+set-option -g allow-rename off
+
+# automatically renumber windows
+set-option -g renumber-windows on
+
+# remove esc delay
+set -sg escape-time 0
+
+# Allow the arrow key to be used immediately after changing windows
+set -g repeat-time 0
+
+# start with window 1 (instead of 0)
+set -g base-index 1
+
+# start with pane 1
+set -g pane-base-index 1
+
+# history
+set -g history-limit 10000
+
+# resizing
+setw -g aggressive-resize on

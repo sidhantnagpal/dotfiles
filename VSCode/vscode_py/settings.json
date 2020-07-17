@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "/spare/local/snagpal/.conda/envs/tauto-dev/bin/python",
+    "python.testing.pytestArgs": [
+        "tauto"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
+}

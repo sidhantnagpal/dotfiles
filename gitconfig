@@ -1,0 +1,18 @@
+[user]
+	name = Sidhant Nagpal
+	email = sidhantnagpal97@gmail.com
+	signingkey = A5DB5A30CDB73D34
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
+
+# [remote "origin"]
+# 	fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+[init]
+	templatedir = ~/.git_template
+[alias]
+	ctags = !.git/hooks/ctags
