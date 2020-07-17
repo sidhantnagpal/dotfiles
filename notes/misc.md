@@ -71,6 +71,10 @@ Git
 	```
 	git log --pretty=email --patch-with-stat --reverse -- path/to/file_or_folder | (cd /path/to/new_repository && git am --committer-date-is-author-date)
 	```
+* Checkout
+        - git checkout -b <branch> <base>
+* Commit
+        - git commit --amend (delete everything to abort)
 * Stash
 	- git stash
 	- git stash [list | pop | drop]
@@ -87,8 +91,8 @@ Git
 * Rebase
 	* git rebase [upstream]
 	* Interactive Rebase [fixup, reword, edit, pick etc.]
-		- `git rebase -i HEAD~7`
-* Git Log
+		- `git rebase -i HEAD~7` (delete everything to do nothing)
+* Log
 	* `git log --pretty=format:'%h : %s' --graph > log.log`
 		- https://stackoverflow.com/a/10063456
 

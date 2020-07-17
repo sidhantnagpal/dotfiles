@@ -9,10 +9,25 @@ Vim commands can be combined, e.g.,
 * :%y will yank all lines
 
 Vim
-- Use `:%!git blame %` for annotations and then :u to undo it.
-- In `less`, use `g` for beginning (or `g5` for 5th line from begin), `G` for end (or `G5` for 5th line from end), use `F` for follow (equivalent to `tail -f`).
+* In `less`, use `g` for beginning (or `g5` for 5th line from begin), `G` for end (or `G5` for 5th line from end), use `F` for follow (equivalent to `tail -f`).
+* Shift+A - insert mode from last character of current line
+  o - insert mode from beginning of next line
+* yy - copy current line
+  10yy - copy 10 lines from current line
+  10dd - cut 10 lines from current line
+  10p - paste contents 10 times below current line
 
-A (shift + a) - insert mode from last character of current line
+* p (or ""p) - paste from default register `"` (points to last used register)
+ "0p - paste from the yank register ("0)
+ "1p - paste from the delete register ("1)
+ "[2-9]p - paste from numbered register ("[2-9])
+ `"_d` - cut to black hole register (ie delete without saving)
+
+
+* "1p to paste the last delete and then use `.` to repeatedly to paste the subsequent deletes, ie:
+    `"1p...` is basically equivalent to `"1p"2p"3p"4p`
+  This trick can be used to reverse-order a handful of lines:
+    `dddd"1p...`
 
 :w - write
 :q - quit
@@ -52,7 +67,7 @@ A (shift + a) - insert mode from last character of current line
 :25 - goto row (line) 25
 25| - goto column 25
 0/$ - beginning/end of line
-(/) - move a sentence back/forward
+)/( - move a sentence forward/back
 w/e - move forward to beginning/end of word
 3w - move forward 3 words
 b - move back to beginning of word
@@ -84,7 +99,7 @@ hence:
 	last delete (d)/change (c) can be accessed using "1p
 )
 (
-infact:
+in fact:
 	vim has 1 unnamed register "" (which is the default register)
 	vim has 10 numbered registers ranging from 0-9
 		last yank can be accessed using "0p
