@@ -113,14 +113,17 @@ if has("autocmd")
     " Disable smartindent for python, creates problem typing hash in a newline
     autocmd FileType python setlocal nosmartindent indentkeys-=<:>
 
+    " For go
+    autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4 nolist
+
     " Don't expand tabs for configs, dockerfiles
-    autocmd FileType gitconfig,sh,toml,dockerfile,tsv set noexpandtab
+    autocmd FileType gitconfig,sh,toml,dockerfile,tsv setlocal noexpandtab
 
     " For yaml, json
     autocmd FileType yaml,json setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 
     " For Makefile
-    autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
+    autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
     " Enable spell check for git commits
     autocmd FileType gitcommit setlocal spell
