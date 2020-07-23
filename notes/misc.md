@@ -80,6 +80,11 @@ Git
 	- git stash [list | pop | drop]
 	- git stash show -p  # view most recent stash diff
 	- git stash show -p stash@{1}  # view diff of arbitrary stash
+* Diff
+        - git diff > patch  # create a patch file
+        - git diff branch1..branch2  # compare two branches
+        - git diff branch1..branch2 <filepath>  # compare file on two different branches
+        - git diff --no-index <dir1> <dir2>  # compare contents of two directories (even if they're not vc'ed, that's why --no-index)
 * Patch
 	- `git apply <patch>`
 	- `git apply -R <patch>`
