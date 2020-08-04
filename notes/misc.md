@@ -42,6 +42,23 @@ Process
 		* `ps -eFL`
 * `mkfifo` (named pipes, used for IPC)
 
+Jobs
+----
+* Processes that are managed by shell (each of which has a sequential job ID and an associated PID). See https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/.
+
+* `jobs` (list the jobs running in background)
+	- `jobs -ps` (list the PIDs (-p) of stopped (-s) jobs)
+* Status of a job
+	- Foreground
+		* `fg [%N]` (bring the current or specified job with job ID N to foreground)
+	- Background
+		* `<command> &`
+		* `bg [%N]` (place th current or specified job with job ID N to background)
+	- Stopped
+		* If `^Z` is pressed for a fg job or `stop` is issued for a bg job, the job stops.
+		* Note, when you place a stopped job either in the foreground or background, the job restarts.
+* `%-` indicates last job, `$!` indicates last background process
+
 Directory
 ---------
 * `tree`
