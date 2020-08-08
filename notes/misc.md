@@ -21,11 +21,18 @@ General
 * `head` [-n]
 * `xargs`
 * `column` [-tns]
-* `man` [-k], `man 1 bash` (searches section 1)
 * `which` [-a]
 * `who`, `whoami`
 * `type`, `file`, `stat`
 * `true`, `false`
+* `time`
+    - "user" denotes time spent in user-space
+    - "sys" denotes time spent in kernel-space (syscalls)
+    - "real" denotes total time elapsed (= user + sys) ie the wall-clock time
+* `man` [-k]
+    - `man chmod` gives the manual page for "chmod" user command (like `man 1 chmod`)
+    - `man 2 chmod` gives the manual page for "chmod" syscall (system call)
+    - section 1 contains user commands, section 2 contains system calls
 
 Process
 -------
