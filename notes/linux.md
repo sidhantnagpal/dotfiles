@@ -10,7 +10,7 @@ Accessing the Files
 |-----------------------|----------------------------------|--------------------------------------|
 | Read/Write access     | open(), close(), read(), write() | fopen(), fclose(), fread(), fwrite() |
 | Random access         | lseek()                          | fseek(), rewind()                    |
-| Type of descriptor    | int                              | FILE*                                |
+| Type of descriptor    | int                              | FILE *                               |
 | User-space buffering? | No                               | Yes                                  |
 | Part of C Standard?   | No                               | Yes                                  |
 
@@ -28,7 +28,7 @@ Accessing the Files
 * Epoll
 	- short for event poll
 	- improves on the poll() and select() syscalls, especially when hundreds of file descriptors have to be polled in a single program
-	- epoll_create(), epoll_ctl(), epoll_wait() syscalls
+	- `epoll_create()`, `epoll_ctl()`, `epoll_wait()` syscalls
 		- epoll_ctl() takes an argument `events` which if has the EPOLLET value set, makes the watch on fd edge-triggered, as opposed to level-triggered.
 		- Level-triggered is the default behavior. It is how poll() and select() behave, and it is what most developers expect. Edge-triggered behavior requires a different approach to programming, commonly utilizing nonblocking IO, and careful checking for EAGAIN.
 
