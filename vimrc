@@ -125,6 +125,10 @@ if has("autocmd")
     " For Makefile
     autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
+    " For Markdown
+    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+    autocmd FileType markdown setlocal spell tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+
     " Enable spell check for git commits
     autocmd FileType gitcommit setlocal spell
 
