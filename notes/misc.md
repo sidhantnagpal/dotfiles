@@ -18,7 +18,12 @@ General
 * `less`, `zless` (on gz files, less also works)
 * `grep` [-ionErvcC], `zgrep` (r - recursive, v - invert, c - count, C - context of lines, above and below)
 * `tail` [-fFn]
+	- `tail -10` or `tail -n10`  # get last 10 lines
+	- `tail -n +10`  # get all but first 10 lines
+
 * `head` [-n]
+	- `head -10` or `head -n10`  # get first 10 lines
+	- `head -n -10`  # get all but last 10 lines
 * `xargs`
 * `column` [-tns]
 * `which` [-a]
