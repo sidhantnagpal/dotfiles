@@ -182,7 +182,9 @@ if (fork()) {  /* PARENT */
     if (WIFEXITED(status))
         printf("child ended normally, exit status = %d\n", WEXITSTATUS(status));
     if (WIFSIGNALED(status))
-        printf("child terminated by signal %d\n", WTERMSIG(status));
+        printf("child terminated by signal %d: %s\n", WTERMSIG(status), strsignal(WTERMSIG(status)));
+    if (WCOREDUMP(status))
+        printf("child produced core dump, signal %d\n", WTERMSIG(status));  // or "child cored" or "child core dumped"
 }
 else {   /* CHILD */
     printf("child running ... PID is %d", getpid());
@@ -190,11 +192,9 @@ else {   /* CHILD */
 }
 ```
     - `kill -n <pid>` (n is the signal number >1)
-        - SIGTERM (15) - default
-        - SIGKILL (9)
-        - SIGSEGV (11)
-        - SIGABRT (6)
-        - SIGINT (2)
+        - `kill -9 <pid>` or `kill -KILL <pid>`
+        - `kill -15 <pid>` or `kill -TERM <pid>`
+        - `kill -2 <pid>` or `kill -INT <pid>`
 
 * Process Life Cycle
         |
@@ -256,3 +256,109 @@ p[1] -> __________ -> p[0]
           but they will read from separate pipes (unidirectional from server for each client) which are named uniquely based on PID.
         - A named pipe allows many clients to write to the same pipe. Linux guarantees that at least
           PIPE_BUF bytes can be written to a pipe atomically (one-shot write). [PIPE_BUF = 4096]
+
+
+Controlling Access, Identity & Permissions
+------------------------------------------
+
+- File permissions
+    - `umask()` syscall is used to set permissions (`0666 & ~umask`) while creating a file
+    - after the file has been created the permissions can be changed using `chmod()` syscall (for changing mode)
+- File ownership
+    - `chown()` syscall or command (for changing owner)
+        - `chown` by default follows symbolic links and changes the owner of the actual files (to avoid this use `-h`)
+        - `chown` can be used with `-R` for recursively changing the owner
+        - `chown [OPTIONS] USER[:GROUP] FILE(s)`
+            - `chown -R :infra /spare/local`  # recursively change the group
+            - `chown -h snagpal /spare/local`  # change the user and don't follow symlinks
+            - `chown --from=snagpal infrad /spare/local`  # verify user and then change to new user
+            - `chown --from=snagpal:infra /spare/local/file.txt`  # just verify the user and group
+            - `chown --from=infrad:infra snagpal:infra /spare/local/` # change both the user and group
+
+
+Signals
+-------
+
+- An event or notification delivered by kernel to a process that something has happened (possibly external to a process). A process can choose what it needs on receiving a signal to do by providing a signal handler and installing the handler.
+
+- Signal Types
+
+| Signal Name | Number | Default Action |                               Description                               |
+|:-----------:|:------:|:--------------:|:-----------------------------------------------------------------------:|
+|    SIGHUP   |    1   |      Term      | Hangup detected on controlling terminal or death of controlling process |
+|    SIGINT   |    2   |      Term      |               Signal sent by ^C (interrupt from keyboard)               |
+|   SIGTRAP   |    5   |      Core      |                          Trace/breakpoint trap                          |
+|   SIGABRT   |    6   |      Core      |    assertion failures or abort (causing abnormal process termination)   |
+|    SIGFPE   |    8   |      Core      |                         Floating-point exception                        |
+|   SIGKILL   |    9   |      Term      |       Kill signal (lethal - cannot be caught, blocked, or ignored)      |
+|   SIGSEGV   |   11   |      Core      |                         Invalid memory reference                        |
+|   SIGPIPE   |   13   |      Term      |                Broken pipe: write to pipe with no readers               |
+|   SIGTERM   |   15   |      Term      |                     Polite "please terminate" signal                    |
+|   SIGCHLD   |   17   |  Ign (Ignore)  |                       Child stopped or terminated                       |
+
+- Establishing a Signal Handler
+    - `signal(SIGINT, handler);`  // installs SIGHUP signal handler
+                |       |
+            signal    pointer to signal
+             type     handler function
+                      or one of:
+                       - SIG_IGN to ignore signal
+                       - SIG_DFL to restore default
+    - `sigaction(SIGINT, &newact, &oldact);`  // much more flexible than `signal()` syscall and should be used always
+        - `newact` and `oldact` are of type:
+        ```
+        struct sigaction {
+            void     (*sa_handler)(int);  // handler or SIG_IGN or SIG_DFL
+            ...
+            sigset_t   sa_mask;  // set of signals to be blocked during execution of handler
+            int        sa_flags; // mpdify the behavior of signal (like automatically restart syscalls)
+            ...
+        };
+        ```
+        - old sigaction info may be received in `oldact` or can be `NULL` if not desired
+
+```
+void handler(int sigtype)
+{
+    /* handling */
+    ...
+    return;
+}
+```
+
+- Signal delivery is entirely asynchronous with whatever the program is doing and it can occur at any point.
+  Signals can be blocked during parts of execution of program which shouldn't be interrupted.
+  Multiple signals may also be blocked but they are not queued, ie only of them will be delivered when the program unblocks.
+    - `sigprocmask(how, &set, &oldset)` can be used for blocking signals
+        - `how` can be
+            - SIG_BLOCK   - add these signals to mask
+            - SIG_UNBLOCK - remove these signals from mask
+            - SIG_SETMASK - assign this signal set to the mask
+        - `set` of signals to add / remove
+        - `oldset` to get old set of signals if desired or `NULL`
+
+- `raise(SIGHUP);`  // raise can be used to send a signal to ourselves
+
+- Use-cases for Signals
+    1. Ignore them
+    2. Clean-up and terminate
+        * SIGTERM is a request to terminate gracefully
+            - flush any in-memory data to a file
+            - remove any temporary resources that can outlive the process
+              like files, message queues, named pipes, child processes, etc.
+    3. Re-configure on the fly
+        * Daemon processes often use a configuration file when they start up.
+            - To allow the daemon to be re-configured without restarting, a signal handler can
+              be installed to re-read the file. (The signal used for this is typically SIGHUP.)
+            - The daemon can control when this can and cannot happen by setting a process mask.
+    4. Report status dynamically
+        * Long running daemon program may accumulate internal state information
+          which can be useful for dumping usage-statistics, diagnostic-info or
+          debugging-output to a file. (The signal used for this is typically SIGUSR1.)
+    5. Turn debugging on or off
+    6. Implement a timeout
+        * To implement timeouts for potentially blocking system calls like read().
+          (SIGALRM signal can be used along with not restarting the syscall after the signal.)
+    7. Schedule periodic actions
+        * SIGALRM signal can be used for this use-case too. The trick is to request another
+          alarm before exiting the handler.
