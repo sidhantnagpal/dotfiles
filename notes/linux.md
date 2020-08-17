@@ -262,7 +262,7 @@ Controlling Access, Identity & Permissions
 ------------------------------------------
 
 - File permissions
-    - `umask()` syscall is used to set permissions (`0666 & ~umask`) while creating a file
+    - `umask()` syscall is used to set permissions (`0666 & ~umask`) while creating a file (umask is short for user mask)
     - after the file has been created the permissions can be changed using `chmod()` syscall (for changing mode)
 - File ownership
     - `chown()` syscall or command (for changing owner)
