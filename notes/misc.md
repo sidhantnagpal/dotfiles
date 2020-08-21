@@ -114,6 +114,13 @@ Git
         - git diff branch1..branch2  # compare two branches
         - git diff branch1..branch2 <filepath>  # compare file on two different branches
         - git diff --no-index <dir1> <dir2>  # compare contents of two directories (even if they're not vc'ed, that's why --no-index)
+* Stage
+  - `git add -p <path>`  # interactively choose hunks from patch for staging, following options will be shown among others in prompt:
+    * y - yes, stage the hunk for next commit
+    * n - no, do not stage the hunk for next commit
+    * e - edit, manually edit the current hunk
+    * s - split, split the current hunk into smaller hunks
+    * q - quit, do not stage this hunk and any of the remaining hunks
 * Patch
 	- `git apply <patch>`
 	- `git apply -R <patch>`
