@@ -5,6 +5,42 @@ Python
 		`python -c "print("0"*8)"`
 	- `-i` (enter interactive mode after executing)
 		`python -i script.py`
+* Python tricks
+  - generators (yield, next, send)
+  - iterators (iter, next)
+  - metaclasses (eg. for Singleton)
+  - decorators
+  - type annotations (typing module, mypy library)
+  - polymorphism (using `*args` and/or `**kwargs`)
+  - dataclass, namedtuple, Enum
+  - arguments
+    - position-only: use `/` (argument clinic) in argument list
+    - keyword-only: use `*` in argument list (disallowing positional args beyond this point)
+  - `@property`, `@classmethod` (alternate constructors use-case), `@staticmethod` (tied to a class instead of its objects)
+  - prefer using `None` over `()` (empty tuple) as immutable default arguments in methods
+  - `None or []` evaluates to `[]` (empty list)
+  - `dir()`, `vars()`
+  - dunders
+    - `__new__`, __init__`, `__slots__`
+    - `__len__`, `__getitem__`, `__reversed__`
+    - `__eq__`, `__lt__`, `__le__`
+    - `__add__`, `__radd__`
+    - `__getattr__`, `__setattr__`, `__delattr__`
+    - `__enter__`, `__exit__`
+    - `__call__`
+    - `__name__`, `__doc__`, `__bases__`, `__dict__`
+    - `__repr__, `__str__`, `__format__`
+      * TL;DR: repr is unambiguous representation of the object, str is meant for human readable format.
+        If you want to define just one of them, it should be repr.
+      * Conversion flags `!s` and `!r` which call `str()` and `repr()` respectively:
+        * '{0}'.format(a) will use the result of `a.__format__()` to display the value
+        * '{0!s}'.format(a) will use the result of `a.__str__()` to display the value
+        * '{0!r}'.format(a) will use the result of `a.__repr__()` to display the value
+      * Eg.
+```
+>>> "repr() shows quotes: {!r}; str() doesn't: {!s}".format('test1', 'test2')
+"repr() shows quotes: 'test1'; str() doesn't: test2"
+```
 * IPython tricks
 	* general
 		- getting help: `<object_name>?`, `<object_name>??`
