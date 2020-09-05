@@ -31,9 +31,38 @@ Features/Concepts
 	* std::unique_ptr, std::make_unique
 	* std::shared_ptr (reference counting), std::make_shared
 	* both the above smart pointers support * and -> operators like raw pointers in addition to `.get()`, `.reset()`, `.release()`
+	* std::shared_ptr can be used for golang-like defer in C++
+		- see https://stackoverflow.com/a/33055669
+		- see https://www.boost.org/doc/libs/1_59_0/libs/smart_ptr/sp_techniques.html#handle
+
+* use dynamically allocated arrays (memory claimed from heap)
+	- VLAs (variable length arrays) are claimed from function stack and should be avoided
+		* The argument is, if you know the size beforehand, you can use a static array. And if you don't know the size beforehand, you will write unsafe code.
+		* eg.
+```
+void foo(int n) {
+    int values[n]; // declare a variable length array - unsafe
+}
+```
+	- dynamic allocation
+```
+ Feature                  | new/delete                     | malloc/free
+--------------------------+--------------------------------+-------------------------------
+ Memory allocated from    | 'Free Store'                   | 'Heap'
+ Returns                  | Fully typed pointer            | void*
+ On failure               | Throws (never returns NULL)    | Returns NULL
+ Required size            | Calculated by compiler         | Must be specified in bytes
+ Handling arrays          | Has an explicit version        | Requires manual calculations
+ Reallocating             | Not handled intuitively        | Simple (no copy constructor)
+ Call of reverse          | Implementation defined         | No
+ Low memory cases         | Can add a new memory allocator | Not handled by user code
+ Overridable              | Yes                            | No
+ Use of (con-)/destructor | Yes                            | No
+```
 
 * strongly typed enums (over the old-style enums)
 	- old-style enums do not have their own scope
+
 ```
 enum Animals {Bear, Cat, Chicken};
 enum Birds {Eagle, Duck, Chicken}; // error! Chicken has already been declared!

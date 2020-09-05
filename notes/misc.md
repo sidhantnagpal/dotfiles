@@ -152,6 +152,16 @@ Network
 -------
 * `ping`, `traceroute`
 * `ifconfig`, `ethtool`
+
+* `ip`
+```
+$ ip neighbor show to 10.28.89.23
+10.28.89.23 dev eth2 lladdr ec:0d:9a:f4:80:10 STALE
+
+$ ip route get 10.28.89.23
+10.28.89.23 dev eth2 src 10.28.89.22 uid 7112
+```
+
 * `netstat` [-nap]
 	- p shows protocol information, for only tcp ports use -t, for only udp ports use -u
 * `lsof` (list open files)
