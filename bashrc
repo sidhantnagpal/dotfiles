@@ -70,6 +70,8 @@ _has() {
 }
 
 if _has fzf; then
+  # Check if rg is present otherwise try to use ag.
+  #	    Doesn't follow symlinks by default (add --follow after --hidden in both rg / ag commands to do so).
   if _has rg; then
     SEARCH_PREFIX="rg --no-ignore --hidden --glob '!{.git,node_modules}/*'"
     FSEARCH_SUFFIX="--files 2>/dev/null"
@@ -81,7 +83,7 @@ if _has fzf; then
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
   # Nice little trick, without argument tries to locate the filename, with argument
-  #          searches for the pattern in filecontents (and then for the filename)
+  #         searches for the pattern in filecontents (and then for the filename)
   vimrg() {
     vim $(eval "$SEARCH_PREFIX --smart-case -l \"${@:-}\" | fzf --preview 'cat {}'")
   }
