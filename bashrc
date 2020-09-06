@@ -65,18 +65,29 @@ export PYTHONDONTWRITEBYTECODE=1
 ####### Requires rg/ag and fzf ########
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-if rg --version &>/dev/null; then
-    export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
-else
-    export FZF_DEFAULT_COMMAND='ag --hidden --ignore-dir={.git,node_modules} -g "" 2>/dev/null'
+_has() {
+  return $(type $1 &>/dev/null)
+}
+
+if _has fzf; then
+  if _has rg; then
+    SEARCH_PREFIX="rg --no-ignore --hidden --glob '!{.git,node_modules}/*'"
+    FSEARCH_SUFFIX="--files 2>/dev/null"
+  else
+    SEARCH_PREFIX='ag --skip-vcs-ignores --hidden --ignore-dir={.git,node_modules}'
+    FSEARCH_SUFFIX='-g "" 2>/dev/null'
+  fi
+  export FZF_DEFAULT_COMMAND="$SEARCH_PREFIX $FSEARCH_SUFFIX"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+  # Nice little trick, without argument tries to locate the filename, with argument
+  #          searches for the pattern in filecontents (and then for the filename)
+  vimrg() {
+    vim $(eval "$SEARCH_PREFIX --smart-case -l \"${@:-}\" | fzf --preview 'cat {}'")
+  }
+  # If more filecontent oriented search is required,
+  #   use `vim -c "Rg"` or `vim -c "Ag"`, which is equivalent
+  #   to opening vim and then executing the commands `:Rg` / `:Ag`
+  #   shorthand: `vi -cRg`
 fi
 
-# Nice little trick, without argument tries to locate the filename, with argument
-#                    searches for the pattern in filecontents (and then for the filename)
-vimrg() { vim $("${FZF_DEFAULT_COMMAND%% *}" -il "${@:-}" | fzf --preview 'cat {}'); }
-# If more filecontent oriented search is required,
-#   use `vim -c "Rg"` or `vim -c "Ag"`, which is equivalent
-#   to opening vim and then executing the commands `:Rg` / `:Ag`
-#   shorthand: `vi -cRg`
-
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
