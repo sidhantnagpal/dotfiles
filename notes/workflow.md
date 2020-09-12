@@ -13,7 +13,6 @@ Complete Setup Steps [ssh, bash, tmux, git, ctags, vim]
 * git
 	- copy `~/.gitconfig`
 	- copy `~/.gitignore`
-	- copy `~/.git_template`
 
 * vim
 	- copy `~/.vimrc`
@@ -52,11 +51,6 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 				- History/ (search history)
 				- History (closed buffer history)
 
-[need installation]
-* ctags [exuberant vs universal]
-	- copy `~/.ctags`
-	[add `set tags=.git/tags;/` to vimrc]
-
 * fzf (fuzzy finder)
 	```
 	$ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -82,21 +76,9 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	$ strip ~/.cargo/bin/rg # remove debug symbols from the binary
 	```
 
-	[add to bashrc:
-		For using as `vimrg [flags] [PATTERN]` (if no pattern specified search will be over file names):
-		```
-		vimrg() { vim $(rg -il "${@:-}" | fzf --preview 'cat {}'); }
-		```
-		To make fzf use rg instead of find:
-		```
-		export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
-		export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-		```
-		refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
-	]
+	refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
 
-
-* VSCode Extensions
+* VSCode (+extensions)
 	- Remote Development
 	- Rainbow CSV
 	- vscode-icons
