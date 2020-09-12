@@ -31,7 +31,7 @@ Features/Concepts
 	* std::unique_ptr, std::make_unique
 	* std::shared_ptr (reference counting), std::make_shared
 	* both the above smart pointers support * and -> operators like raw pointers in addition to `.get()`, `.reset()`, `.release()`
-	* std::shared_ptr can be used for golang-like defer in C++
+	* `std::shared_ptr<void>` can be used for golang-like defer in C++
 		- see https://stackoverflow.com/a/33055669
 		- see https://www.boost.org/doc/libs/1_59_0/libs/smart_ptr/sp_techniques.html#handle
 

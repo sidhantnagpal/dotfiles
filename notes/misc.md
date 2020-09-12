@@ -39,38 +39,6 @@ General
     - `man 2 chmod` gives the manual page for "chmod" syscall (system call)
     - section 1 contains user commands, section 2 contains system calls
 
-Process
--------
-* `top`, `htop` [-u <user>]
-* `pgrep`
-* `pkill` or `kill`
-* `taskset` [-cp]
-* `ps`
-	- `ps -ef`
-	- `ps -eLo user,pid,ppid,lwp,state,pcpu,pmem,policy,rtprio,psr,comm`
-	- With CPU Core Info:
-		* `ps -eF`
-	- With CPU Core Info and Thread Info:
-		* `ps -eFL`
-* `mkfifo` (named pipes, used for IPC)
-
-Jobs
-----
-* Processes that are managed by shell (each of which has a sequential job ID and an associated PID). See https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/.
-
-* `jobs` (list the jobs running in background)
-	- `jobs -ps` (list the PIDs (-p) of stopped (-s) jobs)
-* Status of a job
-	- Foreground
-		* `fg [%N]` (bring the current or specified job with job ID N to foreground)
-	- Background
-		* `<command> &`
-		* `bg [%N]` (place th current or specified job with job ID N to background)
-	- Stopped
-		* If `^Z` is pressed for a fg job or `stop` is issued for a bg job, the job stops.
-		* Note, when you place a stopped job either in the foreground or background, the job restarts.
-* `%-` indicates last job, `$!` indicates last background process
-
 Directory
 ---------
 * `tree`
@@ -137,16 +105,40 @@ Git
 	* `git log --pretty=format:'%h : %s' --graph > log.log`
 		- https://stackoverflow.com/a/10063456
 
-Conda
------
-* conda activate <env-name>
-* conda deactivate
-* conda env list
-* conda env export
-* conda list <package-name>
-* conda env remove -n <env-name>
-* conda create -n <env-name> python=3.7
-* conda create -n <env-name> --clone <env-name>
+Process
+-------
+* `top`, `htop` [-u <user>]
+* `pgrep`
+* `pkill` or `kill`
+* `taskset` [-cp]
+* `ps`
+	- `ps -ef`
+	- `ps -eLo user,pid,ppid,lwp,state,pcpu,pmem,policy,rtprio,psr,comm`
+	- With CPU Core Info:
+		* `ps -eF`
+	- With CPU Core Info and Thread Info:
+		* `ps -eFL`
+* `mkfifo` (named pipes, used for IPC)
+* `lsof` (list open files)
+* `daemonize`
+
+Jobs
+----
+* Processes that are managed by shell (each of which has a sequential job ID and an associated PID). See https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/.
+
+* `jobs` (list the jobs running in background)
+	- `jobs -ps` (list the PIDs (-p) of stopped (-s) jobs)
+* Status of a job
+	- Foreground
+		* `fg [%N]` (bring the current or specified job with job ID N to foreground)
+	- Background
+		* `<command> &`
+		* `bg [%N]` (place th current or specified job with job ID N to background)
+	- Stopped
+		* If `^Z` is pressed for a fg job or `stop` is issued for a bg job, the job stops.
+		* Note, when you place a stopped job either in the foreground or background, the job restarts.
+* `%-` indicates last job, `$!` indicates last background process
+
 
 Network
 -------
@@ -164,11 +156,10 @@ $ ip route get 10.28.89.23
 
 * `netstat` [-nap]
 	- p shows protocol information, for only tcp ports use -t, for only udp ports use -u
-* `lsof` (list open files)
-* `daemonize`
 * `socat`
 	* more flexible than `nc` (or `netcat`)
 		* more flexible than `telnet`
+* `nslookup`
 
 * `tcpdump` -i<interface> -w<pcap-path> -Z<user> -nnls0 -c<count> 'expression'
 	- for dumping network traffic as pcap
@@ -204,6 +195,17 @@ $ ip route get 10.28.89.23
 	- make a hexdump or reverse it (using -r)
 	- eg. xxd dump.pcap dump.hex
 	- eg. xxd -r dump.hex dump.pcap
+
+Conda
+-----
+* conda activate <env-name>
+* conda deactivate
+* conda env list
+* conda env export
+* conda list <package-name>
+* conda env remove -n <env-name>
+* conda create -n <env-name> python=3.7
+* conda create -n <env-name> --clone <env-name>
 
 Usability
 ---------
