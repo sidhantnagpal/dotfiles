@@ -96,6 +96,8 @@ Python
 		* xarray - data analysis toolkit for n-dimensional data
 		* matplotlib - plotting
 		* scikit-learn - machine learning
+		* jax
+			- GPU/TPU-backed NumPy with differentiation and JIT compilation by Google
 		* pytorch - neural networks
 		* torchtext, spacy - natural language processing
 	- optimizing computation
@@ -108,7 +110,10 @@ Python
 			- big data collections
 				- like parallel arrays, dataframes, and lists that extend common interfaces like numpy, pandas, or python iterators to larger-than-memory or distributed environments
 				- these parallel collections run on top of dynamic task schedulers
-	- integrating python with other languages (interoperability)
+	- integrating python with other languages (like C++)
+		[1] https://wiki.python.org/moin/IntegratingPythonWithOtherLanguages
+		[2] https://youtu.be/jQedHfF1Jfw
+		[3] https://taotie.readthedocs.io/en/latest/resource/programing/python_performance.html
 		- C/C++ binding generators
 			* generating python bindings for a C++ library
 			* tools to make C/C++ functions/methods accessible from python by generating binding (Python extension or module) from header files
