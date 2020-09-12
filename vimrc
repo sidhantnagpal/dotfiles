@@ -78,11 +78,13 @@ if has("gui_running")
 endif
 
 colorscheme molokai-custom
-" set background=dark
-" colorscheme slate
+"set background=dark
+"colorscheme slate
 
-" Use the macOS/Linux system clipboard
-set clipboard=unnamedplus
+" Not using the system clipboard for macOS/Linux (better off with vim
+" registers)
+"set clipboard=unnamedplus
+
 " Set the tab key to indent 4 spaces
 set shiftwidth=4
 set softtabstop=4
@@ -166,7 +168,7 @@ nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gvdiffsplit<space>
 
 " ==================== fzf ====================
-" let g:fzf_layout = { 'down': '~70%' }
+"let g:fzf_layout = { 'down': '~70%' }
 let g:fzf_layout = { 'window': 'enew' }
 nnoremap <leader>r/ :Rg<CR>
 nnoremap <leader>l/ :Lines<CR>
