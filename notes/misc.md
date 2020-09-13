@@ -207,6 +207,10 @@ Conda
 * conda create -n <env-name> python=3.7
 * conda create -n <env-name> --clone <env-name>
 
+* conda config --set auto_activate_base false
+* conda config --set changeps1 true
+
+
 Docker
 ------
 * Containers
