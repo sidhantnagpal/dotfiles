@@ -11,14 +11,14 @@ Build Commands
 ==============
 ```
 # Configure
-$ cmake -GNinja -S../pybind-benchmarks/ -B../_build -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=Debug -DPYTHON_EXECUTABLE=$CONDA_PREFIX/bin/python3.7
+$ cmake -GNinja -S../pybind-benchmarks/ -B../_build -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=Debug -DPYTHON_EXECUTABLE=$CONDA_PREFIX/bin/python
 
 # Building
 $ cmake --build ../_build --target benchmark_pybind11
 $ cmake --build ../_build --target benchmark_boost
 
 # Test
-$ PYTHONPATH=../_build python3.7 benchmark.py
+$ PYTHONPATH=../_build $CONDA_PREFIX/bin/python benchmark.py
 ```
 
 
