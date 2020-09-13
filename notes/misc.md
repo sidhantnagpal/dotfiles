@@ -230,7 +230,7 @@ Docker
 * Docker images are immutable as opposed to Conda environments which are mutable.
 * Image is to Container, as, Program is to Process. (basically, a container is a running instance of image)
 * To switch from interactive mode to daemon mode, the control sequence `^P^Q` can be used to detach and then the container can be reattached using `docker attach <name/id>`.
-
+* Copy to/from docker container using `docker cp mycontainer:/foo.txt foo.txt` or `docker cp bar.txt mycontainer:/bar.txt`.
 
 Usability
 ---------
