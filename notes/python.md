@@ -96,9 +96,9 @@ Python
 		* xarray - data analysis toolkit for n-dimensional data
 		* matplotlib - plotting
 		* scikit-learn - machine learning
-		* jax
+		* jax (Google)
 			- GPU/TPU-backed NumPy with differentiation and JIT compilation by Google
-		* pytorch - neural networks
+		* pytorch (Facebook) - neural networks
 		* torchtext, spacy - natural language processing
 	- optimizing computation
 		* numba
@@ -118,6 +118,20 @@ Python
 			* generating python bindings for a C++ library
 			* tools to make C/C++ functions/methods accessible from python by generating binding (Python extension or module) from header files
 				* pybind11 > boost.python (simplicity and development time)
+	- client-server
+		* protobuf (Google) `conda install -c anaconda protobuf`
+			- a method of serializing structured data
+			- useful for IPC (inter-process communication) over a wire or for storing data
+			- involves an IDL (interface description language) that describes the structure of some data and a program that generates source code from that description for generating or parsing a stream of bytes that represents the structured data
+		* gRPC (Google) `conda install -c conda-forge grpcio grpc-cpp`
+			- open source remote procedure call (RPC) system
+			- uses HTTP/2 for transport, Protobuf as the IDL, and provides features such as authentication, bidirectional streaming and flow control, blocking or non-blocking bindings, and cancellation and timeouts
+			- generates cross-platform client and server bindings for many languages
+			- common use-cases include connecting services in microservices-style architecture and connect mobile devices, browser clients to backend services
+
+			* gRPC vs REST
+				- https://www.yonego.com/nl/why-milliseconds-matter/
+				- https://nordicapis.com/when-to-use-what-rest-graphql-webhooks-grpc/
 
 Concurrency
 -----------
