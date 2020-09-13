@@ -207,6 +207,27 @@ Conda
 * conda create -n <env-name> python=3.7
 * conda create -n <env-name> --clone <env-name>
 
+Docker
+------
+* Containers
+	- `docker run -it --name geekc7 centos:7 /bin/bash`  # run a command inside a container, note that pressing `^D` exits (stops) the container
+	- `docker ps -a`  # list all containers
+	- `docker attach`  # attach standard streams to running container
+	- `docker [start|stop|restart|kill] <name/id>`
+	- `docker rm` # remove a container
+* Images
+	- `docker image ls -a`  # list all images
+	- `docker image rm <name/id>`  # remove an image
+	- `docker [push|pull]`  # push/pull image to/from a registry
+	- `docker [save|import]`  # save or import tarball for filesystem image
+	- `docker build`  # build an image from a Dockerfile
+	- last 3 commands can also be accessed as subcommands of `docker image [push|pull|save|import|build]`
+
+* Docker images are immutable as opposed to Conda environments which are mutable.
+* Image is to Container, as, Program is to Process. (basically, a container is a running instance of image)
+* To switch from interactive mode to daemon mode, the control sequence `^P^Q` can be used to detach and then the container can be reattached using `docker attach <name/id>`.
+
+
 Usability
 ---------
 * directory list using <tab> completion
