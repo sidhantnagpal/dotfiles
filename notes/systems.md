@@ -521,19 +521,232 @@ Network Services
 DNS
 ---
 
+* Domain Name System (DNS) is a global and highly distributed network service that resolves domain names into IP addresses.
+
+_The further you've to route data, the slower the network communication becomes. In almost all situations, it is going to be quicker to transmit data between places that are geographically closer to each other._
+
+
+* Things required for network configuration on a host:
+    1. IP Address
+    2. Subnet Mask
+    3. Primary Gateway
+    4. DNS Server
+
+* Types of DNS Servers
+    1. Caching name servers
+    2. Recursive name servers
+    3. Root name servers
+    4. TLD (top-level domain) name servers
+    5. Authoritative name servers
+
+    * Caching and recursive name servers are generally provided by the ISP and used to store known domain lookups for a certain amount of time.
+
+    * All domain names in the global DNS system have a TTL (which is a value in seconds that can be configured by the owner of domain name to specify how long a name server is allowed to cache the entry before discarding it and performing a full DNS resolution). As the internet has grown, the large values of TTL have gone down to few hours or minutes.
+
+* Name Resolution: https://youtu.be/QKfk7YFILws?t=10042
+
+* DNS uses UDP for 2 primary reasons:
+    - A single DNS request and response can generally fit in a single UDP datagram packet, making it an ideal candidate for connectionless protocol.
+    - DNS can generate a lot of traffic (even though there are caching systems) due to full DNS resolutions.
+
+    _Using TCP for something as rudimentary as DNS would be an overkill and significantly slow. As far as error recovery is concerned, if DNS resolver doesn't get a response back it simply asks again, which means the same functionality which TCP provides at the transport layer is provided by DNS at the application layer._
+
+    _Note that DNS over TCP also exists: as the internet has grown it may no longer be the case that DNS response will fit a UDP datagram. In this situation, DNS name server would respond with a packet explaining that the response is too long, after receipt of which the DNS client will establish a TCP connection to perform the lookip._
+
+
+* Resource Records
+    - A-Record
+        - point a certain domain name to IPv4 address
+        - a single domain name can have multiple A-records which can be used with DNS round-robin to balancing the traffic across different servers. For eg. if there are four A-records with IPs 10.1.1.0/30 and
+            - DNS resolver on first client performs a lookup, it will get the four IPs in the order 0, 1, 2, 3.
+            - DNS resolver on second client performs a lookup, it will get the four IPs in the order 1, 2, 3, 0.
+    - AAAA-Record (Quad-A Record)
+        - similar to A-Record but for IPv6
+    - CNAME Record
+        - redirect traffic from one domain to another. For eg. if AAPL runs their webservers on "www.apple.com" and want to ensure anyone who enters "apple.com" gets properly redirected, they can do so by creating a CNAME record for "apple.com" to make it resolve to "www.apple.com".
+        - CNAME is useful for ensuring that you've to only change the IP address of the canonical name (since all other domain names redirect to the canonical name).
+    - MX Record - mail exchange
+    - SRV Record - service record (like calendar scheduling service)
+    - TXT Record - text record
+    - etc.
+
+* Anatomy of a Domain Name
+www.google.com
+ |      |    |
+ |      |    +-- TLD (Top-Level Domain)
+ |      |           * last part of domain name
+ |      |           * TLDs are managed by ICANN, sister org to IANA)
+ |      |
+ |      +------- domain
+ |                  * used to demarcate where control moves from a TLD name server to an authoritative name server
+ |                  * typically controlled by independent orgs outside of ICANN
+ |                  * costs money to buy a domain from a registrar (registrar is a company that
+ |                    has an agreement with ICANN to sell unregistered domain names)
+ |
+ +-------------- subdomain
+                    * can be freely chosen by anyone who owns the domain
+
+* When you combine all of these, you've what is called *FQDN* (Fully qualified domain name).
+* FQDN is limited to a length of 255 characters with each section having upto 63 characters.
+
+_DNS can technically support upto 127 levels of domain in a single FQDN._
+
+
+* DNS Zones
+- Allow for easier control over multiple levels of domain. For eg.
+    * la.largecompany.com
+    * de.largecompany.com
+    * ch.largecompany.com
+- Zone files are simple configuration files that declare all resource records for a particular zone.
+
+
 DHCP
 ----
+* An application layer protocol that automates the configuration process of hosts on a network.
+
+* Things required for network configuration on a host:
+    1. IP Address
+    2. Subnet Mask
+    3. Primary Gateway (IP Address of Router)
+    4. DNS Server (IP Address of Name Server)
+    Of these the last 3 will typically remain same while configuring multiple hosts on a network.
+    However, for network communication, each host must be given a different IP which is tedious
+    to do manually and is therefore managed by DHCP.
+
+* DHCP Server may use one of the following methods for dynamic host configuration:
+    - Dynamic Allocation
+        - range of IPs is set aside for client devices and issues as and when they're requested
+        - a host may get a different each time it reconnects to the network
+    - Automatic Allocation
+        - range of IPs is set aside for assignment which are kept track of
+        - a host would be reassigned the same IP if possible when reconnecting to the network
+    - Fixed Allocation
+        - requires manually specified list of MAC addresses and their corresponding IPs
+
 
 NAT
 ---
 
+* Network Address Translation is a technique that allows a gateway, usually a router or firewall, to rewrite the source IP of an outgoing IP datagram while retaining the original IP in order to rewrite it into the response.
+
+* A router with NAT connecting nodes A and B, hides IP of A from B. This is called *IP masquerading* which is an important security concept.
+* In a similar way, hundreds of nodes in network A can have their IP translated to that of the router making the entire address space of A invisible to the rest of world. This is called *one-to-many NAT*. Port preservation can be used in the router for routing the responses received by it to the respective nodes in the network A.
+
+* Port forwarding can be used for complete *IP masquerading*.
+
+
 VPN
 ---
 
+* Virtual Private Networks are a technology that allows for the extension of a private or local network to hosts that might not be on that local network.
+* When a VPN connection is established using a remote client, the remote client provisions a virtual interface (encrypted VPN tunnel) with an IP that matches the address space of the remote network.
+
+* Most VPNs work by using the payload section of the transport layer that contains an entire second set of packets intended to traverse the remote network. This process is completed in the inverse in the opposite direction.
+
+
 Proxies
 -------
+
+* Proxy is a server that acts on behalf of a client in order to access another service.
+* Proxies provide the following benefits:
+    - Anonymity
+    - Security
+    - Content Filtering
+    - Increased Performance
+
+* Reverse Proxy is a service that might appear to be a single server to external clients but actually represents many servers living behind it.
 
 
 
 Connecting to Internet
 ======================
+
+* USENET
+    * uses POTS (plain old telephone service) for data transfer
+    * baud rate: 300 bps (phone line)
+* Dial-up Connection
+    * gets its name by the fact that connection is established by actually dialling a phone number
+    * uses POTS for data transfer
+    * uses modems
+    * baud rate: 14.4 kbps (phone line)
+* Broadband
+    - refer to long lasting connections (need not be established with each use like dial-up)
+    - major broadband technologies
+        * T-carrier technologies
+            - originally invented by AT&T to transmit multiple phone calls over a single link
+            - data rate: 1.544 Mbps (T1 line)
+        * DSL
+            - digital subscriber line, also use modems aka DSLAM, could deliver data at much higher rates using the same phone line while operating at a different frequency range
+            - unlike dial-up connections, these are long running connections
+            - common types of DSL:
+                - ADSL (asymmetric DSL) offered faster download speeds and slower upload speeds (client-side)
+                - SDSL (symmetric DSL) offered same speeds for download and upload (server-side)
+            - data rate: 1.544 Mbps
+        * Cable broadband
+            - coaxial cables with a different frequency range could deliver data at much higher rates
+            - uses cable modem which connects to CMTS
+            - CMTS (Cable Modem Termination System)
+                * connects lots of different cable connections to ISP's core network
+        * Fiber connections
+            - uses optical instead of electrical signals which can transmit over long distances without degradation
+            - ONT (Optical Network Terminator)
+                * converts data from protocols that fiber network can understand to those that the twisted-pair copper networks can understand
+
+* Wide Area Networks (WANs)
+    * Acts like a single network that spans multiple physical locations
+    * Requires contracting a link across the Internet with your ISP
+
+* Point-to-Point VPNs
+    * aka Site-to-Site VPNs act a lot like individual users sitting on either sides of a network except for the fact that the tunneling logic is managed by a network device so that users don't have to establish their own connections
+
+
+Wireless Networks
+-----------------
+
+* Specifications in IEEE 802.11 family make up the set of technologies called WiFi.
+* Wireless networking devices communicate to each other through Radio Waves.
+* Frequency band is a certain section of radio spectrum that is agreed upon to be used for certain communications
+    - In North America, FM radio transmissions operate between 88-108 MHz. This specific frequency band is called FM broadcast band.
+    - WiFi networks operate on a few different frequency bands, most commonly, 2.4GHz and 5GHz.
+
+* In terms of networking model, 802.11 defines the physical and data link layers.
+
+* Wireless Access Point (WAP)
+    - a device that bridges the wireless and wired portions of a network
+
+* Dissecting an 802.11 Frame
+
++-------------+----------------+----------+----------+----------+-----------+----------+-----------------+--------+
+| FrameCtl(2B)| duration/ID(2B)| Addr1(6B)| Addr2(6B)| Addr3(6B)| SeqCtl(2B)| Addr4(6B)| Payload(0-7951B)| FCS(4B)|
++-------------+----------------+----------+----------+----------+-----------+----------+-----------------+--------+
+
+- Usually, destination and receiver address are the same.
+- Usually, source and transmitter address are the same.
+- Addr1,2,3,4 are MAC addresses.
+
+
+* Wireless Network Configurations
+    - Ad-hoc networks
+    - Wireless LANs (WLANs)
+    - Mesh networks
+
+* Wireless Channels
+    - individual smaller sections of the overall frequency band used by a wireless network
+    - used to solve the problem of collision domain for wireless networks (similar to how switches were solved this problem for wired network - ethernet)
+
+* Wireless Security
+
+    _Wired connections have an inherent security aspect in the sense that only the two nodes at either end of the link have access to data being transmitted._
+
+    - WEP (Wired Equivalent Privacy) an encryption technology that provides very low level of privacy. A bad actor can break through this encryption and read through the data. WEP uses 40-bit encryption key.
+    - WPA (WiFi Protected Access) uses 128-bit encryption key.
+    - WPA2 uses 256-bit encryption key.
+    - MAC Filtering can be configured in access points to allow connections from MAC addresses of trusted devices.
+
+
+* Cellular Networking
+    - Like WiFi, cellular networking uses Radio Waves and specific frequency bands.
+    - One big difference compared to WiFi is that these frequencies can travel over much longer distance (in kms or miles).
+    - Cell towers can be thought of as access points with much larger range.
+
+    - Devices like cell phones, tablets and even automobiles have started using cellular networking.
