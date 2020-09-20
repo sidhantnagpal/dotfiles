@@ -22,7 +22,7 @@ set fileformat=unix               " Prefer UNIX file format
 set backspace=indent,eol,start    " Makes backspace key more powerful
 set autoindent                    " Make new line indent match that of previous line
 set display+=lastline             " Show as much of lastline as possible instead of @
-set diffopt+=vertical             " Prefer vertical diff
+set encoding=utf-8                " Use default encoding as UTF-8
 
 " Better Completion
 set complete=.,w,b,u,t
@@ -67,14 +67,17 @@ if !v:shell_error && s:uname == "Linux" && !has('nvim')
   set ttymouse=xterm
 endif
 
-" Use default encoding as UTF-8
-set encoding=utf-8
-
 " Enable syntax highlighting
 syntax enable
-if has("gui_running")
+if (has("gui_running"))
   set regexpengine=1
   syntax enable
+endif
+
+" Use 24-bit (true-color) mode in vim/neovim
+" outside tmux or in tmux>=2.2
+if (has("termguicolors"))
+  set termguicolors
 endif
 
 colorscheme molokai-custom
@@ -145,9 +148,6 @@ if !exists(":DiffOrig")
                                 \ | wincmd p | diffthis
 endif " to exit this `:bd` to delete buffer scratch and `:diffoff` to hide the bar
 
-" Ctags
-set tags=.git/tags;/
-
 " This comes first, because we have mappings that depend on leader
 " With a map leader it's possible to do extra key combinations
 " i.e: <leader>w saves the current file
@@ -179,6 +179,20 @@ nnoremap <leader>w :Windows<CR>
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>gf :GFiles<CR>
 nnoremap <leader>h :Hist
+
+"==================== NerdTree ====================
+"" For toggling
+nmap <C-n> :NERDTreeToggle<CR>
+noremap <leader>n :NERDTreeToggle<CR>
+
+let NERDTreeShowHidden=1
+
+let NERDTreeIgnore=['\.vim$', '\~$', '\.git$', '.DS_Store']
+
+" Close nerdtree and vim on close file
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&
+" b:NERDTreeType == "primary") | q | endif
+
 
 if v:version >= 801
   packadd termdebug  " make sure gdb >= 7.12
