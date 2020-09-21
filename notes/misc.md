@@ -4,7 +4,7 @@ Extraction
 * `awk` [-F]
 * `cut` [-df]
 * `tr`
-* `sort` [-usrgn], (u - unqiue, g - float, n - numeric)
+* `sort` [-ugnsrm], (u - unqiue, g - float, n - numeric, s - stable, r - reverse, m - merge)
 * `uniq`
 * `strings`
 * `tee`
