@@ -309,10 +309,18 @@ C++
             - hence, dynamically linked libraries leave smaller memory footprints (in terms of RAM) since they're shared across processes
 
 * `gcc` (GNU C Compiler), `cc` (or `clang`) (LLVM Clang Compiler)
-* `ar`, `ld`
-* GNU Make
+* `objdump` [-d]
+  - display information from object files
+  - `-d` can be used for disassembly
+* `ar` (GNU ar)
+  - program creates, modifies, and extracts from archives
+* `ld` (GNU Linker)
+  - ld combines a number of object and archive files, relocates their data and ties up symbol references
+  - Usually the last step in compiling a program is to run ld
+
+* GNU Make (build system) vs Ninja
     - `make` uses Makefile or makefile
-* GNU Autoconf or CMake
+* GNU Autoconf vs CMake (build generator)
     - GNU Autoconf helps generate a (Makefile from Makefile.in) and/or (config.h from config.h.in) using a script `configure` based on system settings
     - CMake uses configuration file CMakeLists.txt to generate the build system
 * Pointer interpretation
