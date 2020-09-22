@@ -311,7 +311,7 @@ C++
 * `gcc` (GNU C Compiler), `cc` (or `clang`) (LLVM Clang Compiler)
 * `objdump` [-d]
   - display information from object files
-  - `-d` can be used for disassembly
+  - `-d` can be used for disassembly (see https://stackoverflow.com/a/49732039)
 * `ar` (GNU ar)
   - program creates, modifies, and extracts from archives
 * `ld` (GNU Linker)
