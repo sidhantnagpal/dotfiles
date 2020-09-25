@@ -162,7 +162,41 @@ Network
 * `socat`
     * more flexible than `nc` (or `netcat`)
         * more flexible than `telnet`
-* `nslookup`
+* `nslookup` (name server lookup for DNS)
+
+* `hexdump` [-C]
+    - for displaying contents of binary files in hex/dec/oct/ASCII
+
+* `xxd` [-r]
+    - make a hexdump or reverse it (using -r)
+    - eg. xxd dump.pcap dump.hex
+    - eg. xxd -r dump.hex dump.pcap
+
+* pcap (packet capture) tools
+  - `tcpdump` - limited protocol decoding but available on most nix-systems (native capture format is libpcap aka regular pcap)
+  - `wireshark` - powerful sniffer which can decode lots of protocols, lots of filters; following tools ship with wireshark:
+    * `tshark` : command-line for wireshark (native capture format is libpcap like tcpdump)
+    * `rawshark` : dump and analyze raw libpcap data
+
+    * `dumpcap` : engine used by wireshark/tshark, whose only purpose is to capture network traffic while retaining advanced features
+    * `editcap` : edit and/or translate the format of capture files (eg. `editcap -F pcapng in.pcap out.pcap` will convert in.pcap in libcap format to out.pcap with pcap-ng format)
+    * `mergecap` : merges multiple capture files into one
+    * `reordercap` : reorder input file by timestamp into output file
+
+    * `text2pcap` : generates a capture file from an ASCII hexdump of packets
+    * `randpkt` : random packet generator (generates a pcap file with random packets)
+
+    * `capinfos` : capture information statistics from a saved capture file
+
+  _Note 1_:
+    - `wireshark` or `tshark` can be used for both capturing and analysing traffic
+    - `dumpcap` and `tcpdump` can both be used for only capturing traffic
+      * although, tcpdump is available by default on most nix-systems, dumpcap is suited for long-term capturing and has more features
+
+  _Note 2_: pcap-ng (next generation pcap) is better than libpcap (regular pcap) format as
+    - It supports captures form multiple interfaces
+    - It improves timestamp resolutions (libpcap only supports microsecond resolution at best)
+    - It has additional metadata in capture file and has an extendable format
 
 * `tcpdump` -i<interface> -w<pcap-path> -Z<user> -nnls0 -c<count> 'expression'
     - for dumping network traffic as pcap
@@ -190,14 +224,6 @@ Network
     - to get hex-ascii bytes printed, convert hex string to binary using `xxd -r` first and then use `hexdump -C`
         `echo <hex-string> | xxd -r -p | hexdump -C`
     - Len = length(data) = frame.len - length(TCPHeader)
-
-* `hexdump` [-C]
-    - for displaying contents of binary files in hex/dec/oct/ASCII
-
-* `xxd` [-r]
-    - make a hexdump or reverse it (using -r)
-    - eg. xxd dump.pcap dump.hex
-    - eg. xxd -r dump.hex dump.pcap
 
 Conda
 -----
