@@ -157,9 +157,50 @@ Python isn't fast. That is a tradeoff we all made when we started using it. It c
 
 * Load Balancers: Run your application with multiple processes and use a load balancer to share traffic between them.
 * CPU Monitoring: Make sure your application isn't maxed out on CPU. Even better, if you're using kubernetes(or something similar), setup auto scalers when CPU hits thresholds.
-* Connection Pooling: Prevent simultaneous connections to python applications by using proxies/load balancers that will pool requests in front of your application to ensure your application is servicing a healthy number of requests at a time.
+* Connection Pooling: Prevent simultaneous connections to python applications by using proxies/load-balancers that will pool requests in front of your application to ensure your application is servicing a healthy number of requests at a time.
 * Message Queues: If you have CPU bound tasks, put them in a queue to be processed by another service. If you have a threaded application and have a lot of network-bound IO, you might also want to use a message queue for that.
-* Micro-Services: If you are using AsyncIO, you can leverage micro-services to off-load potentially CPU-bound operations.
+* Microservices: If you are using AsyncIO, you can leverage micro-services to off-load potentially CPU-bound operations.
 * Caching
 
 See https://www.nathanvangheem.com/posts/2019/06/11/scaling-python-web-applications.html
+
+
+Which concurrency model to use when?
+------------------------------------
+* Asyncio
+	- performance is IO-bound rather than CPU-bound
+	- when starting new codebase without synchronous legacy code
+
+	_Note_
+	* async/await allows cooperative multitasking
+
+* Threads
+	- need preemptive multitasking (ie tasks can interrupt other tasks)
+	- when integrating synchronous code (which involves blocking system calls)
+	- need fine-grained concurrency (tasks working with each other simultaneously)
+	- need Python "glue" for optimized/compiled C (or other language) code
+
+	_Note_
+	* Python threads are actually OS (kernel) threads (or POSIX threads) which are preempted (interrupted) by the OS (kernel).
+	* Golang threads are like green threads (or cooperative threads) which are application-level threads (or user-space threads) and are managed by Golang runtime. (Golang schedulers are *cooperative* whereas OS schedulers are *preemptive*)
+
+* Processes
+	- when there isn't need of substantial inter-task communication
+	- since processes don't share memory, inter-process communication (IPC) becomes difficult and has to be done through files, pipes or mmap (memory-mapped regions)
+  - need to be mindful of forking, pickling (which have overheads)
+
+* Distributed Tasks
+	- highly segmentable and distributable workload
+	- need for shared state is minimal (as overhead of communication between nodes in a network is much more compared to IPC)
+	- if there is large enough workload to overcome the performance overhead of orchestrator
+
+Also, see https://realpython.com/python-concurrency.
+
+Suggestions
+-----------
+* Python Concurrency from Ground-Up by David Beazley https://youtu.be/MCs5OvhV9S4
+* Think outside the GIL (asyncio + multiprocessing) by John Reese (Facebook) https://youtu.be/0kXaLh8Fz3k
+* Writing thread-safe code is hard (need to check locks, races, etc). (asyncio + multiprocessing) is generally all you need. Asyncio lets you be efficient for IO-bound tasks on a single core and multiprocessing allows distributing CPU-bound tasks across multiple cores.
+  	_Note: Some quirks about asyncio_ (reference: https://youtu.be/iG6fr81xHKA)
+  	* In asyncio, long CPU-intensive tasks should routinely release the CPU to avoid starving other tasks. This can be done by introducing `await asyncio.sleep(0)` to tell the loop to return control ASAP.
+  	* Blocking library functions (socket, select, subprocess, os.waitpid, threading, multiprocessing, time.sleep) are incompatible with async frameworks.
