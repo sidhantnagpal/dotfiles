@@ -11,6 +11,7 @@ set hlsearch                      " Highlight found searches
 set incsearch                     " Switch on incremental search
 set ic                            " Ignore case in searches by default
 set smartcase                     " ... but not when search pattern contains upper case characters
+set showcmd                       " Show me what I'm typing
 set showmatch                     " Show matching parentheses
 set number                        " Always show line numbers
 set laststatus=2                  " Always show status, current position (instead of `set ruler`)
@@ -21,8 +22,15 @@ set hidden                        " Allow buffers to be hidden even with unwritt
 set fileformat=unix               " Prefer UNIX file format
 set backspace=indent,eol,start    " Makes backspace key more powerful
 set autoindent                    " Make new line indent match that of previous line
-set display+=lastline             " Show as much of lastline as possible instead of @
+set autowrite                     " Automatically save before :next, :make etc.
+set autoread                      " Automatically reread changed files without asking me anything
 set encoding=utf-8                " Use default encoding as UTF-8
+set belloff=all                   " No beeps
+set noswapfile                    " Don't use swap file (*.ext.swp)
+set nobackup                      " Don't use backup file (*.ext~)
+set nowritebackup                 " Don't create temporary backups while saving files
+set noundofile                    " Don't use undo file
+set display+=lastline             " Show as much of lastline as possible instead of @
 
 " Better Completion
 set complete=.,w,b,u,t
@@ -37,11 +45,6 @@ if !&sidescrolloff
   set sidescrolloff=5             " The number of screen columns to keep to the left and right of the cursor
 endif
 
-" Increase undo history
-if &history < 1000
-  set history=100
-endif
-
 " Improve performance
 set ttyfast                       " Allow fast scrolling
 set lazyredraw                    " Don’t update screen during macro and script execution (can delay appearance of laststatus)
@@ -52,6 +55,17 @@ set norelativenumber
 syntax sync minlines=256
 set synmaxcol=1000
 set re=1
+
+" Increase undo history
+if &history < 1000
+  set history=100
+endif
+
+" Time out on key codes but not mappings. Basically, this makes terminal Vim work sanely.
+set notimeout
+set ttimeout
+set ttimeoutlen=10
+
 
 " Enable mouse mode if available
 if has('mouse')
@@ -83,10 +97,6 @@ endif
 colorscheme molokai-custom
 "set background=dark
 "colorscheme slate
-
-" Not using the system clipboard for macOS/Linux (better off with vim
-" registers)
-"set clipboard=unnamedplus
 
 " Set the tab key to indent 4 spaces
 set shiftwidth=4
@@ -130,12 +140,19 @@ if has("autocmd")
     " For Makefile
     autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
-    " For Markdown
-    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-    autocmd FileType markdown setlocal spell tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+    " For Dockerfile
+    autocmd FileType dockerfile set noexpandtab
+
+    " shell/config/systemd settings
+    autocmd FileType fstab,systemd set noexpandtab
+    autocmd FileType gitconfig,sh,toml set noexpandtab
 
     " Enable spell check for git commits
     autocmd FileType gitcommit setlocal spell
+
+    " For Markdown
+    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+    autocmd FileType markdown setlocal spell tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab
 
   augroup END
 endif
