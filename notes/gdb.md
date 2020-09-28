@@ -69,6 +69,7 @@ Stack
 
 Miscellaneous
 -------------
+* file <program> - load an executable under debugger control
 * disas - disassemble
 * watch - debugger stops the program when the value of expression changes (also see rwatch, awatch)
 * `p *data@10` - print array
@@ -76,6 +77,15 @@ Miscellaneous
 * set exec-direction [reverse|forward] - GDB will perform all execution commands in specified direction until the it is changed again
 
 
+Core Dump Analysis
+------------------
+* gdb <program> <corefile>  (or `gdb <program>` followed by `(gdb) core <corefile>`)
+* (gdb) bt  - will give the backtrace (`bt` and `where` are synonymous and give same outputs)
+* As mentioned in [link](https://cxwangyi.wordpress.com/2010/01/08/generate-core-dump-files/),
+  make sure the shell command `ulimit -c unlimited` was executed before the buggy program
+	cored (short for "core-dumped", which is synonymous with "seg-faulted").
+
 References
+----------
 [1] https://github.com/CppCon/CppCon2015/blob/master/Demos/Becoming%20a%20GDB%20Power%20User/Becoming%20a%20GDB%20Power%20User%20-%20Greg%20Law%20-%20CppCon%202015.pdf
 [2] https://gist.github.com/savanovich/eb6ee6b264e773968e71#controlling-execution
