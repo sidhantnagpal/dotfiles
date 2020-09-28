@@ -91,13 +91,12 @@ endif
 
 " Use 24-bit (true-color) mode in vim/neovim
 " outside tmux or in tmux>=2.2
-if (has("termguicolors"))
-  set termguicolors
-endif
+"if (has("termguicolors"))
+"  set termguicolors
+"endif
 
-colorscheme molokai-custom
+colorscheme molokai-custom " desert, slate, etc.
 "set background=dark
-"colorscheme slate
 
 " Set the tab key to indent 4 spaces
 set shiftwidth=4
