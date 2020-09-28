@@ -26,7 +26,7 @@ set autowrite                     " Automatically save before :next, :make etc.
 set autoread                      " Automatically reread changed files without asking me anything
 set encoding=utf-8                " Use default encoding as UTF-8
 set matchpairs+=<:>               " Make % jump between angular braces too in addition to other braces
-set belloff=all                   " No beeps
+set noeb vb t_vb=                 " No beeps
 set noswapfile                    " Don't use swap file (*.ext.swp)
 set nobackup                      " Don't use backup file (*.ext~)
 set nowritebackup                 " Don't create temporary backups while saving files
