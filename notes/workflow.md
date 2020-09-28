@@ -6,6 +6,7 @@ Complete Setup Steps [ssh, bash, tmux, git, vim]
 
 * bashrc
 	- modify bash prompt to add git branch and conda env support
+	- also add vimrg function, vi -> vim alias if needed
 
 * tmux
 	- copy `~/.tmux.conf`
@@ -13,6 +14,9 @@ Complete Setup Steps [ssh, bash, tmux, git, vim]
 * git
 	- copy `~/.gitconfig`
 	- copy `~/.gitignore`
+
+* gdb
+	- copy `~/.gdbinit`
 
 * vim
 	- copy `~/.vimrc`
@@ -80,11 +84,12 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
 
 * VSCode (+extensions)
-	- Remote Development
+	- Remote Development (+SSH +Containers)
 	- Rainbow CSV
 	- vscode-icons
 	- YAML
 	- GitLens
+	- Docker
 	- C/C++ GNU Global
 	- Python
 	- LaTeX Workshop
