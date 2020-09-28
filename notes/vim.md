@@ -7,6 +7,14 @@ Vim commands can be combined, e.g.,
 * :25,35y will yank lines from 25 to 35
 * :25,35d will cut/delete lines from 25 to 35
 * :%y will yank all lines
+* Visual mode selection automatically fills the range, which can then be combined with commands
+		- For eg., https://stackoverflow.com/a/23063140 mentions a neat trick for (un)commenting by:
+			- commenting
+				1. visually select the text rows (using V as usual)
+				2. :norm i#  for inserting # (it will actually look like :'<,'>norm i# as the range is automatically filled)
+			- uncommenting
+			  1. visually select the text as before (or type gv to re-select the previous selection)
+				2. :norm ^x  for deleting # (or :norm ^xx for deleting 2-char comment from the first non-space char)
 
 Vim
 * In `less`, use `g` for beginning (or `g5` for 5th line from begin), `G` for end (or `G5` for 5th line from end), use `F` for follow (equivalent to `tail -f`).
@@ -51,10 +59,12 @@ Vim
 :help 'undo'
 /searchstring - find forward from here (press n to continue in same dirn, N for opposite), searchstring can also be a regular expression
 ?searchstring - find previous from here (press n to continue in same direction, N for opposite), searchstring can also be a regular expression
-:s/search/replace/ - find and replace first occurence in current line
+:s/search/replace/ - find and replace first occurrence in current line
 :s/search/replace/g - find and replace globally in current line
 :%s/search/replace/g - find and replace globally in the whole file
-:8,10 s/search/replace/g - find and replace gloablly in range of lines 8 to 10
+:%s/search/replace/gc - find and replace+confirm globally in the whole file
+:8,10 s/search/replace/g - find and replace globally in range of lines 8 to 10
+:%g/foo/s/bar/baz/g - for every line containing foo substitute all bar with baz
 
 :m 12 - move current line to after line 12
 :5,7m 12 - move lines 5 through 7 after line 12
@@ -63,7 +73,8 @@ Vim
 
 :noh - turn off highlighting after find
 
-:0/% - beginning/end of file
+:0 - beginning of file (gg in command mode)
+:% - end of file (G in command mode)
 :25 - goto row (line) 25
 25| - goto column 25
 0/$ - beginning/end of line
@@ -76,6 +87,9 @@ d0 - delete to 0th column
 dd - delete line
 dw - delete subword forward (from cursor position)
 db - delete subword backward (excluding cursor position)
+
+. - repeat last change in normal mode
+@: - repeat last command mode change
 
 :e filename - edit another file
 :ls - show current buffers
@@ -130,3 +144,9 @@ vim 1991
 
 vim is vi improved, so add `alias vi=vim` in `.bashrc` file
 
+
+Useful vim plugins:
+1. pathogen
+2. Fugitive
+3. fzf.vim
+4. NERDTree

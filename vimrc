@@ -25,6 +25,7 @@ set autoindent                    " Make new line indent match that of previous 
 set autowrite                     " Automatically save before :next, :make etc.
 set autoread                      " Automatically reread changed files without asking me anything
 set encoding=utf-8                " Use default encoding as UTF-8
+set matchpairs+=<:>               " Make % jump between angular braces too in addition to other braces
 set belloff=all                   " No beeps
 set noswapfile                    " Don't use swap file (*.ext.swp)
 set nobackup                      " Don't use backup file (*.ext~)
@@ -56,7 +57,7 @@ syntax sync minlines=256
 set synmaxcol=1000
 set re=1
 
-" Increase undo history
+" Increase command history
 if &history < 1000
   set history=100
 endif

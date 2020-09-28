@@ -1,5 +1,5 @@
-Complete Setup Steps [ssh, bash, tmux, git, ctags, vim]
--------------------------------------------------------
+Complete Setup Steps [ssh, bash, tmux, git, vim]
+------------------------------------------------
 
 * ssh
 	- setup identity (use it for git to do password-less auth)
@@ -34,7 +34,7 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 				- Gdiffsplit
 				- Gblame
 				- G{commit, push, pull, rebase, merge}
-		- fzf
+		- fzf.vim
 			```
 			git clone https://github.com/junegunn/fzf.vim.git ~/.vim/bundle/fzf.vim
 			```
@@ -50,6 +50,7 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 				- History: (command history)
 				- History/ (search history)
 				- History (closed buffer history)
+		- NERDTree
 
 * fzf (fuzzy finder)
 	```
