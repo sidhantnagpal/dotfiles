@@ -84,14 +84,14 @@ endif
 
 " Enable syntax highlighting
 syntax enable
-if (has("gui_running"))
+if has("gui_running")
   set regexpengine=1
   syntax enable
 endif
 
 " Use 24-bit (true-color) mode in vim/neovim
 " outside tmux or in tmux>=2.2
-"if (has("termguicolors"))
+"if has("termguicolors")
 "  set termguicolors
 "endif
 
@@ -177,12 +177,14 @@ nnoremap <leader>a :cclose<CR>
 " Remove search highlight
 nnoremap <leader><space> :noh<CR>
 
+
 " ================ vim-fugitive ===============
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gp :Gpush<CR>
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gvdiffsplit<space>
+
 
 " ==================== fzf ====================
 "let g:fzf_layout = { 'down': '~70%' }
@@ -197,6 +199,7 @@ nnoremap <leader>f :Files<CR>
 nnoremap <leader>gf :GFiles<CR>
 nnoremap <leader>h :Hist
 
+
 "==================== NerdTree ====================
 "" For toggling
 nmap <C-n> :NERDTreeToggle<CR>
@@ -210,6 +213,13 @@ let NERDTreeIgnore=['\.vim$', '\~$', '\.git$', '.DS_Store']
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
+"==================== TermDebug ====================
 if v:version >= 801
-  packadd termdebug  " make sure gdb >= 7.12
+  packadd termdebug  " ensure gdb >= 7.12
+
+  " For widescreen code viewing
+  let g:termdebug_wide=1
+
+  " Add mapping to load termdebug
+  noremap <silent> <leader>td :Termdebug<CR>
 endif
