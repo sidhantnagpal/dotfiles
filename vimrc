@@ -199,6 +199,14 @@ nnoremap <leader>f :Files<CR>
 nnoremap <leader>gf :GFiles<CR>
 nnoremap <leader>h :Hist
 
+if executable('rg')
+    set grepprg=rg\ --color=never
+    let $FZF_DEFAULT_COMMAND='rg --files -g "" --hidden'
+elseif executable('ag')
+    set grepprg=ag\ --nocolor
+    let $FZF_DEFAULT_COMMAND='ag -g "" --hidden'
+endif
+
 
 "==================== NerdTree ====================
 "" For toggling
