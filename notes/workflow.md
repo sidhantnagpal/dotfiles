@@ -21,6 +21,7 @@ Complete Setup Steps [ssh, bash, tmux, git, vim]
 * vim
 	- copy `~/.vimrc`
 	- copy `~/.vim` folder (including `colors` and `bundle` for themes and plugins respectively)
+		- prefer to use solarized dark for iTerm2 and Vim both as it has low contrast and is good for eyes
 	- plugins
 		- pathogen
 			```
