@@ -13,15 +13,19 @@ set ic                            " Ignore case in searches by default
 set smartcase                     " ... but not when search pattern contains upper case characters
 set showcmd                       " Show me what I'm typing
 set showmatch                     " Show matching parentheses
+set matchtime=2                   " Tenths of a second to blink when matching brackets
 set number                        " Always show line numbers
-set laststatus=2                  " Always show status, current position (instead of `set ruler`)
+set ruler                         " Show the cursor position all the time
+set laststatus=2                  " Always show the status line
 set splitright                    " Split vertical windows right to the current windows
 set splitbelow                    " Split horizontal windows below to the current windows
 set nospell                       " Enable spell checking depending as per need
 set hidden                        " Allow buffers to be hidden even with unwritten changes
-set fileformat=unix               " Prefer UNIX file format
+set fileformats=unix,dos,mac      " Prefer Unix over Windows over OS 9 formats
 set backspace=indent,eol,start    " Makes backspace key more powerful
 set autoindent                    " Make new line indent match that of previous line
+set smartindent                   " Use smart indentation
+set wrap                          " Wrap lines
 set autowrite                     " Automatically save before :next, :make etc.
 set autoread                      " Automatically reread changed files without asking me anything
 set encoding=utf-8                " Use default encoding as UTF-8
@@ -30,7 +34,7 @@ set noeb vb t_vb=                 " No beeps
 set noswapfile                    " Don't use swap file (*.ext.swp)
 set nobackup                      " Don't use backup file (*.ext~)
 set nowritebackup                 " Don't create temporary backups while saving files
-set noundofile                    " Don't use undo file
+set noundofile                    " Don't use persistent-undo files
 set display+=lastline             " Show as much of lastline as possible instead of @
 
 " Better Completion
@@ -82,11 +86,16 @@ if !v:shell_error && s:uname == "Linux" && !has('nvim')
   set ttymouse=xterm
 endif
 
+
 " Enable syntax highlighting
 syntax enable
+
+" Set extra options when running in GUI mode
 if has("gui_running")
-  set regexpengine=1
-  syntax enable
+    set guioptions-=T
+    set guioptions-=e
+    set t_Co=256
+    set guitablabel=%M\ %t
 endif
 
 " Use 24-bit (true-color) mode in vim/neovim
@@ -95,14 +104,18 @@ endif
 "  set termguicolors
 "endif
 
-colorscheme molokai-custom " desert, slate, etc.
-"set background=dark
+set background=dark
+let g:solarized_termcolors=16
+let g:solarized_termtrans=1
+try
+  colorscheme solarized " desert, slate, peachpuff, etc.
+catch
+endtry
+
 
 " Set the tab key to indent 4 spaces
 set shiftwidth=4
 set softtabstop=4
-set smartindent
-set autoindent
 " Use spaces instead of tabs
 set expandtab
 
@@ -176,6 +189,9 @@ nnoremap <leader>a :cclose<CR>
 
 " Remove search highlight
 nnoremap <leader><space> :noh<CR>
+
+" Toggle paste mode on and off (trailing ! is a neat trick for toggling an option) and show status
+map <c-p> :setl paste! paste?<CR>
 
 
 " ================ vim-fugitive ===============
