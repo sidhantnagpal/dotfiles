@@ -100,15 +100,13 @@ endif
 
 " Use 24-bit (true-color) mode in vim/neovim
 " outside tmux or in tmux>=2.2
-"if has("termguicolors")
-"  set termguicolors
-"endif
+if has("termguicolors")
+  set termguicolors
+endif
 
 set background=dark
-let g:solarized_termcolors=16
-let g:solarized_termtrans=1
 try
-  colorscheme solarized " desert, slate, peachpuff, etc.
+  colorscheme PaperColor " desert, slate, peachpuff, etc.
 catch
 endtry
 
