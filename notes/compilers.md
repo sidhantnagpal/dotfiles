@@ -20,7 +20,7 @@
 	|		- binary size becomes larger
 	|
 	+ Dynamic Linking
-		* shared libraries (.so "shared object" files on nix or .dll files on Windows)
+		* shared libraries (.so "shared object" files on Linux or .dll files on Windows or .dylib files on macOS)
 		* refers to the linking that is done during load or run-time and not when the
 		  executable is created
 		* downsides
@@ -41,6 +41,13 @@
 	|
 	+ Dynamic Loading
 		* means loading the library (or any other binary for that matter) into the memory during load or run-time
+
+Swapping
+--------
+	* main memory <-- pages <-- virtual memory (portion of secondary storage)
+	* page replacement policy (fifo, lru, ff)
+	* page transition: secondary storage to main memory is called "swap-in"
+	* page transition (when page fault occurs): main memory to secondary storage is called "swap-out"
 
 
 References:
@@ -87,29 +94,99 @@ Interpreter	 <----- library
 *Note* Java doesn't fit either of the above categories. Java compiler first converts source code to byte-code which can then be interpreted by JVM (with possibly JIT-compilation ie converting byte-code to machine code at runtime before executing it, namely "just-in time", for optimization).
 
 
-Tools:
+Tools
+-----
 * `cc/c++` or `gcc/g++` or `clang/clang++` (C/C++ compilers for converting source code to object code)
 * `ar` (manipulate archives, can be used to create a static library, converts .o object file to .a archive file)
 * `ld` (static linker)
 * `ld.so` (dynamic linker/loader)
 
 
-Tools for viewing/parsing ELF objects:
+Tools for viewing/parsing ELF objects
+-------------------------------------
 * `ldd` - list shared objects (or shared libraries)
 * `readelf` - display information from ELF files (similar to objdump but it goes into more detail and it exists independently of the BFD library unlike objdump)
 * `objdump` - display information from object files
 * `nm` - list symbols from object files
 
 rpath
-	* rpath designates the run-time search path hard-coded in an executable file or library
-	* dynamic linking loaders use the rpath to find required libraries
-	- `chrpath`
-	- `patchelf`
+	- rpath designates the run-time search path hard-coded in an executable file or library
+	- dynamic linking loaders use the rpath to find required libraries
+	* `chrpath`
+	* `patchelf`
 
 
-Swapping
---------
-	* main memory <-- pages <-- virtual memory (portion of secondary storage)
-	* page replacement policy (fifo, lru, ff)
-	* page transition: secondary storage to main memory is called "swap-in"
-	* page transition (when page fault occurs): main memory to secondary storage is called "swap-out"
+C++ Compiler Flags
+------------------
+
+* Verbosity (warnings)
+	-Wall : turn on a lot of warnings
+	-Werror : treat warnings as errors
+	-Wextra : turn on additional warnings
+	-Wpedantic : issue warnings if not compliant to ISO C/C++
+
+* Standard
+	-std=c++11 : ISO C++11
+	-std=c++17 : ISO C++17
+	-std=gnu++ : ISO C++ with GNU extensions
+
+* Output file
+	-o <outputfile>
+
+* Optimization
+	-O3 : most aggressive optimization (function inlining, loop vectorization and SIMD instructions)
+	-Ofast : activate (-O3) optimization disregarding strict standard compliance
+	-Og : enables all optimization that does not conflict with debugging (can be used with -g)
+
+* Misc options
+	-fPIC : generate position independent code
+
+* Special options
+	-g : builds executable with debugging symbols
+	-c : compile source code to object code (input to linker)
+	-S : only run the preprocess and compilation steps; convert source code to symbolic code (input to assembler)
+	-shared : build a shared library (.so or .dylib on nix or or .dll on Windows); for predictable results, specify the same set of options used for compilation (-fPIC, or model suboptions) when specifying this linker option
+
+* Pass args to preprocessor/assembler/linker
+	-Wp,<arg> : pass the comma separated arguments in <arg> to the preprocessor
+	-Wa,<arg> : 				"				" 				   assembler
+	-Wl,<arg> : 				"				" 				   linker
+		* -Wl,-static : perform a completely static link (no shared libraries used at all)
+		* -Wl,-Bstatic : for any `-lfoo` that follows, use only archive version of the library
+		* -Wl,-Bdynamic : for any `-lfoo` that follows, use shared object of the library
+		* -Wl,-rpath=dir : add a directory to runtime library search path
+
+	Example:
+	To link your program with lib1, lib3 dynamically and lib2, lib4 statically, use:
+		```
+		gcc program.o -llib1 -Wl,-Bstatic -llib2 -llib4 -Wl,-Bdynamic -llib3 -Wl,--as-needed
+		```
+	Assuming that default setting of ld is to use dynamic libraries (it is on Linux).
+	`--as-needed` will drop any unused dynamic library.
+
+* Search paths and linking flags
+	-l[pthread] : links to shared library (or shared object); specifically it links to libpthread.so on nix systems; similarly, `-llinalg` links to linalg.so on nix systems
+	-L[path/to/shared-libs] : add search path to shared libraries
+	-I[path/to/include-dirs] : add search path to header files (.h) or (.hpp)
+	-D[FLAG] or -D[FLAG]=VALUE : pass preprocessor flag
+
+* Emulation
+	-mcpu=pentium4 : tune to pentium4
+	-march=pentium4 : generate instructions for pentium4
+
+
+Create and use a static library
+-------------------------------
+```
+# create object (.o) file
+g++ -c header.cpp
+
+# create archive silently
+#	r - replace/add files to archive
+#	c - silently, opposite of v(erbose)
+#	s - write an object file index into the archive
+ar rcs header.a header.o
+
+# use static library
+g++ main.cpp header.a
+```
