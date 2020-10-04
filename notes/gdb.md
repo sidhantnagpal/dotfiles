@@ -1,4 +1,4 @@
-* build with -g flag to have debug symbols and not let optimization mess-up debugging (-g implies -O0), do not use -Og/-O2/-O3
+* build with -g and -Og flags to have debug symbols and not let optimization mess-up debugging (-g implies -O0), do not use -O1/-O2/-O3/-Ofast.
 * Keep ~/.gdbinit minimal and the following useful options:
 ```
 set history save on

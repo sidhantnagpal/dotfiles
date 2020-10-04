@@ -16,20 +16,20 @@ Features/Concepts
 * lambdas
 * clang80cxx17 > gcc8cxx17
 
-* std::true_type, std::false_type
-* std::string_view
-* std::is_same, std::conditional
-* std::variant
-* static_assert(std::is_base_of<A, B>::value, "")
-* static_cast
+* `std::true_type`, `std::false_type`
+* `std::string_view`
+* `std::is_same`, `std::conditional`
+* `std::variant`
+* `static_assert(std::is_base_of<A, B>::value, "")`
+* `static_cast`
 	- performs implicit conversions
 	- and (possibly unsafe) base to derived conversions
-* reinterpret_cast
+* `reinterpret_cast`
 	- (use sparingly) turns one type directly into another
 
-* smart pointers (avoid use of new / delete altogether, transfer ownership using std::move)
-	* std::unique_ptr, std::make_unique
-	* std::shared_ptr (reference counting), std::make_shared
+* smart pointers (avoid use of new / delete altogether, transfer ownership using `std::move`)
+	* `std::unique_ptr`, `std::make_unique`
+	* `std::shared_ptr` (reference counting), `std::make_shared`
 	* both the above smart pointers support * and -> operators like raw pointers in addition to `.get()`, `.reset()`, `.release()`
 	* `std::shared_ptr<void>` can be used for golang-like defer in C++
 		- see https://stackoverflow.com/a/33055669
@@ -70,7 +70,7 @@ enum Birds {Eagle, Duck, Chicken}; // error! Chicken has already been declared!
 enum class Fruits { Apple, Pear, Orange };
 enum class Colours { Blue, White, Orange }; // no problem!
 ```
-	- old-style enums implicitly convert to integral types, which can lead to strange behaviour
+	- old-style enums implicitly convert to integral types, which can lead to strange behavior
 ```
 enum class Foo : char { A, B, C};
 ```
@@ -81,7 +81,7 @@ enum class Foo : char { A, B, C};
 	template <typename T>
 	void func();
 	```
-	- template template paramters
+	- template template parameters
 	```
 	template <typename T, template <typename, typename> class U>
 	void func();
@@ -104,7 +104,7 @@ Advanced Concepts
 
 * Return Type Resolver
 	- AKA: Return type overloading
-	- Implementation: Uses templatized conversion operator and if constexpr.
+	- Implementation: Uses templatized conversion operator and `if constexpr`.
 ```
 class from_string
 {
@@ -139,5 +139,5 @@ float n_float = from_string("123.111");
 
 * SFINAE (Substitution Failure Is Not An Error)
 	- Intent: To filter out functions that do not yield valid template instantiations from a set of overloaded functions.
-	- Implementation: Achieved automatically by compiler or exploited using std::enable_if.
+	- Implementation: Achieved automatically by compiler or exploited using `std::enable_if`.
 	- Use-case: Template Metaprogramming (TMP)
