@@ -225,6 +225,24 @@ Network
         `echo <hex-string> | xxd -r -p | hexdump -C`
     - Len = length(data) = frame.len - length(TCPHeader)
 
+#### Capturing & Viewing Packets
+```
+tcpdump -i eth0 -Z snagpal port 22 and not host 172.30.247.4 -U -w - | tee filename.$(date +%Y-%m-%d.%Z.%H.%M.%S).pcap | tcpdump -U -n -r -
+```
+
+`-U` tells tcpdump to use packet buffering for stdout
+`-w -` tells tcpdump to write binary data to stdout
+`tee` writes binary data to pcap file and its own stdout
+`-r -` tells tcpdump to read binary data from stdin
+
+_Note_ The final `-U` is important for displaying packets on stdout as they are captured. If the capture is not to be saved, the tee command (in the middle) can be removed. After the capture has been completed, it is better to use `tshark -r` instead of `tcpdump -r` for packet analysis.
+
+#### Analyzing Packets
+`tshark -r capture.pcap` or `tshark -r capture.pcap.gz` with `-V` optionally specified for viewing packet details
+
+_Note_ The tcpdump equivalent for this would be `tcpdump -nr capture.pcap`.
+
+
 Conda
 -----
 * conda activate <env-name>
