@@ -238,7 +238,7 @@ tcpdump -i eth0 -Z snagpal port 22 and not host 172.30.247.4 -U -w - | tee filen
 _Note_ The final `-U` is important for displaying packets on stdout as they are captured. If the capture is not to be saved, the tee command (in the middle) can be removed. After the capture has been completed, it is better to use `tshark -r` instead of `tcpdump -r` for packet analysis.
 
 #### Analyzing Packets
-`tshark -r capture.pcap` or `tshark -r capture.pcap.gz` with `-V` optionally specified for viewing packet details
+`tshark -r capture.pcap` (or `tshark -r capture.pcap.gz`) with `-V` optionally specified for viewing packet details (or `-Vx` if the hex, ASCII dump of packet data is also desired)
 
 _Note_ The tcpdump equivalent for this would be `tcpdump -nr capture.pcap`.
 
