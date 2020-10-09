@@ -242,7 +242,10 @@ _Note_ The final `-U` is important for displaying packets on stdout as they are 
 
 _The tcpdump equivalent for this would be `tcpdump -nr capture.pcap`._
 
-_Note_ To save just one particular packet as a pcap, copy the hexdump from data section in the output of `tshark -r <path/to/pcap> -Vx` and use `text2pcap - oup.pcap` to paste hexdump on stdin (and press ^D) to save the pcap. See [reference](https://www.wireshark.org/docs/wsug_html_chunked/ChIOImportSection.html).
+*Points to Note*
+1. TShark by default displays relative timestamps. To use absolute timestamps, the timestamp format can be specified as `-t a`.
+2. For single-pass analysis (-Y <filter>), use `-Y 'tcp'` for display filtering. For two-pass analysis (-R <filter> -2 -Y <2nd-filter>), use `-R 'tcp' -2 -Y "frame.number == 5"` for display filtering.
+3. To save just one particular packet as a pcap, copy the hexdump from data section in the output of `tshark -r <path/to/pcap> -Vx` and use `text2pcap - oup.pcap` to paste hexdump on stdin (and press ^D) to save the pcap. See [reference](https://www.wireshark.org/docs/wsug_html_chunked/ChIOImportSection.html).
 
 
 Conda
