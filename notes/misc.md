@@ -157,6 +157,25 @@ Network
     - `netstat` "network statistics" (monitor network connections both incoming/outgoing, view routing tables, interface statistics, etc.)
     - `route` (view or modify IP routing table)
 
+    Overview of `ip` subcommands to view/modify:
+        * Kernel's ARP table
+            `ip n[eigh]`
+                (use `ip n [show <inet-prefix>]` to display entries for specific address)
+                (use `ip n [show dev <ifname>]` to display entries for specific interface)
+        * Network devices & configuration:
+            `ip l[ink]` (use `[show <ifname>]` for details of a specifc interface)
+            `ip a[ddr]` (similar to `ip link`, also shows inet addresses)
+            `ip m[addr]` (for multicast addresses)
+        * Kernel's Routing Table
+            `ip r[oute]` (`ip route get <dst>` is useful for querying the interface (and gateway) which will be used to route a packet to a given IP address)
+
+    Networking Mnemonics:
+        - inet: Internet protocol (IP) family
+        - inet6: Internet protocol version 6 (IPv6) family
+        - ifname: Interface name
+        - dev: Device
+        - ARP: Address Resolution Protocol
+
 * `netstat` [-nap]
     - p shows protocol information, for only tcp ports use -t, for only udp ports use -u
 * `socat`
