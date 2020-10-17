@@ -112,12 +112,40 @@ Process
 * `pkill` or `kill`
 * `taskset` [-cp]
 * `ps`
-    - `ps -ef`
+    - `ps -fce`
+        * ps -e, select all processes
+        * ps -f, "full" format specifier
+        * ps -c, CMD column contains just the executable name instead of full path
+    - `ps -fcp $(pgrep -f docker)`
+        * ps -p, select by pid (accept PID(s) as positional argument(s))
+        * pgrep -f, search pattern in full path instead of the process name (which is the default)
+        _Advantage of this approach over `ps -ef | grep docker` is that the header is retained in output of ps, plus, redundant matches are prevented due to other columns in output of ps._
+
     - `ps -eLo user,pid,ppid,lwp,state,pcpu,pmem,policy,rtprio,psr,comm`
-    - With CPU Core Info:
-        * `ps -eF`
-    - With CPU Core Info and Thread Info:
-        * `ps -eFL`
+
+    - With thread information:
+        - represented by LWP column (contains light weight process (thread) ID)
+        - aliases: tid,spid
+        * `ps -eLf`
+    - With scheduling policy information:
+        - represented by CLS column (contains sched class of the process)
+        - aliases: policy,class
+        * `ps -o user,pid,cmd,policy,rtprio,nice`
+        * Possible values in CLS column:
+            -   not reported
+            TS  SCHED_OTHER
+            FF  SCHED_FIFO
+            RR  SCHED_RR
+            B   SCHED_BATCH
+            ISO SCHED_ISO
+            IDL SCHED_IDLE
+            DLN SCHED_DEADLINE
+            ?   unknown value
+        * `SCHED_OTHER` is the default universal time-sharing (TS) scheduler policy used by most processes; `SCHED_FIFO` and `SCHED_RR` are intended for special time critical applications aka real-time (RT) processes.
+        * In order to select a process to run, the Linux scheduler must consider the priority of each process. There are two kinds of process priority:
+            - A static priority (aka real-time priority) value is assigned to each process and scheduling depends on this static priority. Processes scheduled with `SCHED_OTHER` have _static priority 0_; processes scheduled under `SCHED_FIFO` or `SCHED_RR` can have a _static priority in the range 1 to 99_ (99 is the highest).
+            - Dynamic priority (aka nice value) is used for non-real time processes.
+
 * `mkfifo` (named pipes, used for IPC)
 * `lsof` (list open files)
 * `daemonize`
