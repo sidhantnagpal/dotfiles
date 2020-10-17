@@ -361,6 +361,7 @@ Utilities
 * `git`
 * `jq`
 * `ssh`, `scp` [-r], `rsync` [-azP]
+* `rlwrap` (readline wrapper)
 * `crontab` [-elr], (e -  edit, l - list, r - remove)
     * for scheduling cron jobs on linux
     * format of cron table entry (DOW stands for Day of Week, 0 = 7 = Sunday):
