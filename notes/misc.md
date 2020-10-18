@@ -60,6 +60,9 @@ Directory
             - `dirs -v` to list dir stack
             - `cd ~0` (or 0,1,2,..N index from the above output)
             - `dirs -c` to clear the directory stack
+* `df -ah` (disk free, reads superblocks)
+* `du -sh` (disk usage, reads individual blocks and sums them)
+* `mount` (list existing mounts)
 
 Git
 ---
@@ -111,6 +114,8 @@ Process
 * `pgrep`
 * `pkill` or `kill`
 * `taskset` [-cp]
+* `numactl` [--membind]
+* `systemctl status <service>` (status of service)
 * `ps`
     - `ps -fce`
         * ps -e, select all processes
@@ -122,6 +127,9 @@ Process
         _Advantage of this approach over `ps -ef | grep docker` is that the header is retained in output of ps, plus, redundant matches are prevented due to other columns in output of ps._
 
     - `ps -eLo user,pid,ppid,lwp,state,pcpu,pmem,policy,rtprio,psr,comm`
+
+    - Real-time monitoring (sorted in DESC by %mem and in ASC by %cpu)
+        `watch -n 1 'ps -eo pid,ppid,cmd,pmem,pcpu --sort=-pmem,+pcpu | head'`
 
     - With thread information:
         - represented by LWP column (contains light weight process (thread) ID)
