@@ -2,8 +2,14 @@ Extraction
 ----------
 * `sed` [-inE], (n is for suppressing automatic printing)
 * `awk` [-F]
-* `cut` [-df]
+* `cut` [-cdf]
+    - `cut -d',' -f1,3,6-8` : select fields (cols) - 1,3,6,7,8
+    - `cut -c 9-` : select chars - 9 to EOL
+    - `cut -f -9` : select fields - till 9
+    - `cut -f -8,10-` : select fields - all but 9
 * `tr`
+    - `tr -d '\r\n'` : delete carriage return and newline chars
+    - `tr 'abc' 'xyz'`: replace a with x, b with y, c with z
 * `sort` [-ugnsrm], (u - unqiue, g - float, n - numeric, s - stable, r - reverse, m - merge)
 * `uniq`
 * `strings`
@@ -220,12 +226,22 @@ Network
 * `nslookup` (name server lookup for DNS)
 
 * `hexdump` [-C]
-    - for displaying contents of binary files in hex/dec/oct/ASCII
+    - for displaying contents of binary files in hex/dec/oct/ascii
+    - `-c` for one-byte character display, `-C` for one-byte canonical display (hex+ascii), `-b` for one-byte octal display
 
 * `xxd` [-r]
     - make a hexdump or reverse it (using -r)
-    - eg. xxd dump.pcap dump.hex
-    - eg. xxd -r dump.hex dump.pcap
+    - `-s offset -l len` can be used to run `xxd` on a portion of input
+    - `-g bytes` can be used to specify the size of group in bytes
+    - `-p` for plain hexdump style
+
+    _Analyzing or converting a hexdump output to specific format_
+        `cat | cut -c 6- | tr -d ' \n' | xxd -r -p | hexdump -C`
+    - paste the hexdump output to stdin for input to `cat`
+    - `cut` will strip the starting address prefixes
+    - `tr` will convert the hexdump to plain format (like the output of `xxd -p`)
+    - `xxd -r` will then reverse the hexdump output to binary format
+    - `hexdump -C` or `xxd -g 1` or custom format can be used to analyze the hexdump
 
 * pcap (packet capture) tools
   - `tcpdump` - limited protocol decoding but available on most nix-systems (native capture format is libpcap aka regular pcap)
