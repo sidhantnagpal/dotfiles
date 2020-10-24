@@ -109,10 +109,13 @@ Git
 * Rebase
     * git rebase [upstream]
     * Interactive Rebase [fixup, reword, edit, pick etc.]
-        - `git rebase -i HEAD~7` (delete everything to do nothing)
+        - `git rebase -i HEAD~7` to perform interactive rebase of last 7 commits
+            (_delete everything in the prompt to abort the rebase_)
 * Log
     * `git log --pretty=format:'%h : %s' --graph > log.log`
         - https://stackoverflow.com/a/10063456
+    * `git log -g` or `git reflog` to walk through reflog entries
+        - `git reset --hard HEAD@{5}` can be used to do undo the last 5 git actions
 
 Process
 -------
