@@ -7,25 +7,41 @@ C++
 Features/Concepts
 -----------------
 * inline static intialization of class variables
-* constexpr compile-time constants (unlike const)
-* templated alias declarations with using keyword
-* variadic templates
-* variadic arguments
+* constexpr compile-time constants
 * template metaprogramming (TMP)
+* templated alias declarations with using keyword
+* variadic templates `template <typename T, typename... Args> T func(T, Args...);`
+* variadic arguments `int printx(const char* fmt, ...);`
 * pure virtual functions (abstract classes)
 * lambdas
 * clang80cxx17 > gcc8cxx17
 
 * `std::true_type`, `std::false_type`
-* `std::string_view`
 * `std::is_same`, `std::conditional`
 * `std::variant`
 * `static_assert(std::is_base_of<A, B>::value, "")`
 * `static_cast`
 	- performs implicit conversions
 	- and (possibly unsafe) base to derived conversions
+	- one very common case is CRTP:
+	```
+	template <class Derived>
+	class Base {
+	    Derived& Self() { return *static_cast<Derived*>(this); }
+	    // ...
+	};
+	class Foo : Base<Foo> { ... };
+	```
+
 * `reinterpret_cast`
 	- (use sparingly) turns one type directly into another
+
+* `std::move`
+	- unconditional cast to an r-value reference of the given type
+	```
+	std::string s;
+	std::move(s);  // unconditional cast to std::string &&
+	```
 
 * smart pointers (avoid use of new / delete altogether, transfer ownership using `std::move`)
 	* `std::unique_ptr`, `std::make_unique`
@@ -61,7 +77,8 @@ void foo(int n) {
 ```
 
 * strongly typed enums (over the old-style enums)
-	- old-style enums do not have their own scope
+	- old-style enums do not have their own scope and are called "unscoped enums"
+	- strongly typed enums are called "scoped enums"
 
 ```
 enum Animals {Bear, Cat, Chicken};
@@ -141,3 +158,107 @@ float n_float = from_string("123.111");
 	- Intent: To filter out functions that do not yield valid template instantiations from a set of overloaded functions.
 	- Implementation: Achieved automatically by compiler or exploited using `std::enable_if`.
 	- Use-case: Template Metaprogramming (TMP)
+
+
+Good practices
+--------------
+
+(see compiler generated code on CEX - https://godbolt.org/)
+
+* auto
+	- Good to use
+	- Does not coerce types, preventing implicit conversions
+
+* Constants (`static` if lifetime is same as program)
+	* Compile-time (`constexpr` or `enums` - scoped/unscoped)
+	* Run-time (`const`)
+
+	- `static constexpr` is preferred over `static const`
+		- `static constexpr` allows compiler optimizations which plain `static` may not
+	- `const` everything
+		- forces to use more organized code
+		- prevents common code errors
+		- encourages more use of algorithms (std::array, <numeric>, <algorithm>)
+		- except: do not return const values, as they break move semantics
+
+* Use (algorithms & lambdas) over raw loops as the former express intent
+
+* Avoid raw pointers and explicit memory (de)allocations using new / delete
+
+* `const_cast` is a code smell as it'd be UB if const is cast away and mutation happens
+
+* `static const` and `extern const` are code smells - use `static constexpr` instead of former and `constexpr` for the latter
+
+* Variables (and members) should be `const` unless marked mutable, functions should be `noexcept` unless marked except.
+
+* `explicit` keyword can be used for constructors to disallow implicit conversion constructor from being invoked.
+
+* explicitly deleted functions and defaulted functions in C++11
+	```
+	class A {
+	public:
+	    A() = default;  // compiler will generate efficient default implementation
+	    A(const A&) = delete;  // delete the copy constructor
+	    A& operator=(const A&) = delete;  // delete the copy assignment operator
+	};
+	```
+
+* static accumulate
+	```
+	template <typename T>
+	constexpr T static_accumulate(size_t idx, const T* arr)
+	{
+	    return idx > 0 ? arr[idx] + static_accumulate(idx - 1, arr) : arr[0];
+	}
+	#define STATIC_ACCUMULATE(X) (static_accumulate(sizeof(X) / sizeof(*X), (X)))
+	```
+
+* union and struct bitfields
+	```
+    union Attributes
+    {
+        unsigned char bitfield;
+        struct
+        {
+            unsigned char a : 3;  // bitfield declaration
+            unsigned char b : 2;
+            unsigned char c : 1;
+            unsigned char d : 1;
+            unsigned char e : 1;
+        };
+    };
+    ```
+
+* anonymous namespaces (`namespace { ... }`) can be used to declare unique identifiers without making them global static. The variables enclosed in an anonymous namespace can only be accessed within the file in which the namespace was created.
+
+Miscellaneous
+-------------
+* alignment, padding, packing
+	* Packing
+		- `__attribute__((packed))` tells the compiler to minimize the struct size (ie not insert any padding between the members of the struct).
+		- `#pragma pack(push, 1)` and `#pragma pack(pop)` may also be used for the same purpose. They're originally introduced by VC++.
+			- `#pragma pack(n)` simply sets the new alignment (where n is the alignment in bytes, valid values being 1, 2, 4, 8 (default), 16)
+			- `#pragma pack(push[,n])` pushes the current alignment to (internal) stack and then optionally sets the new alignment.
+			- `#pragma pack(pop)` pops the current alignment and sets it as the new alignment.
+	* Alignment
+		- `__attribute__((aligned(16)))` for Uint128/Int128 struct use-case.
+
+	_When to use pragma pack: https://stackoverflow.com/a/7823632/10960444_
+	_Note:
+	1. `packed` means it will use the smallest possible space for `struct` - i.e. it will cram fields together without padding.
+	2. `aligned(4)` means each `struct` will begin on a 4 byte boundary - i.e. for any `struct`, its address will be divisible by 4.
+	These are GCC extensions, not part of any C standard._
+
+* boost::mpl (metaprogramming library): https://www.boost.org/doc/libs/1_45_0/libs/mpl/doc/refmanual.pdf
+
+* GCC (GNU Compiler Collection) supports zero-length arrays to represent flexible arrays.  A zero-length array can be useful as the last element of a structure that is really a header for a variable-length object:
+	```
+	struct line {
+	  int length;
+	  char contents[0];  // or char contents[]; -- called flexible array member
+	};
+	struct line *thisline = (struct line *)
+	  malloc (sizeof (struct line) + this_length);
+	thisline->length = this_length;
+	```
+	_if zero-length is not supported by the compiler, `char contents[1]` can be used to makeshift._
