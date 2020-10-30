@@ -193,6 +193,12 @@ Good practices
 
 * `explicit` keyword can be used for constructors to disallow implicit conversion constructor from being invoked.
 
+* `decltype` and `declval`
+	```
+    using LoginT       = nyse::pillar::stream::Login;  // typeof struct
+    using UserNameT    = decltype(std::declval<LoginT>().username);  // typeof struct member
+	```
+
 * explicitly deleted functions and defaulted functions in C++11
 	```
 	class A {
