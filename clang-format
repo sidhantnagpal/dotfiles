@@ -6,7 +6,7 @@ AlignConsecutiveDeclarations: true
 AlignEscapedNewlinesLeft: true
 AlignOperands:   true
 AlignTrailingComments: true
-AlignTokenMaxPadding: 20
+#AlignTokenMaxPadding: 20
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Inline
@@ -29,7 +29,7 @@ BraceWrapping:
     AfterUnion: true
     BeforeCatch: true
     BeforeElse: true
-    BeforeCaseBreak: false
+    #BeforeCaseBreak: false
     IndentBraces: false
 
 BreakBeforeBinaryOperators: true
@@ -59,7 +59,7 @@ IncludeCategories:
    Priority: 180
  - Regex:    '^<[^/]*\.h>'   # C headers
    Priority: 200
-NestedMacroIndent: true
+#NestedMacroIndent: true
 MaxEmptyLinesToKeep: 3
 KeepEmptyLinesAtTheStartOfBlocks: true
 NamespaceIndentation: None
@@ -72,7 +72,7 @@ PenaltyBreakString: 1000
 PenaltyBreakFirstLessLess: 120
 PenaltyExcessCharacter: 100
 PenaltyReturnTypeOnItsOwnLine: 200
-PenaltyBreakOnLogicalOperators: 100
+#PenaltyBreakOnLogicalOperators: 100
 PointerAlignment: Left
 SpacesBeforeTrailingComments: 2
 Cpp11BracedListStyle: true
@@ -88,11 +88,11 @@ SpacesInCStyleCastParentheses: false
 SpaceAfterCStyleCast: false
 SpacesInContainerLiterals: true
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeTypeEllipsis: true
+#SpaceBeforeTypeEllipsis: true
 ContinuationIndentWidth: 4
 CommentPragmas:  '^ IWYU pragma:'
 ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH ]
-LeaveAsIsRegex: '^T.._COLD_NOINLINE_CODE$|^TEST$|^TEST_F$|^TYPED_TEST'
+#LeaveAsIsRegex: '^T.._COLD_NOINLINE_CODE$|^TEST$|^TEST_F$|^TYPED_TEST'
 SpaceBeforeParens: ControlStatements
 DisableFormat:   false
 
