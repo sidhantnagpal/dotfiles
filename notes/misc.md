@@ -387,7 +387,7 @@ Utilities
 * `curl`, `wget`
 * `git`
 * `jq`
-* `ssh`, `scp` [-r], `rsync` [-azP]
+* `ssh`, `scp` [-r], `rsync` [-azPL] (with -L sync will happen for the contents of files/directories linked to, rather than the symlink)
 * `rlwrap` (readline wrapper)
 * `crontab` [-elr], (e -  edit, l - list, r - remove)
     * for scheduling cron jobs on linux
