@@ -79,11 +79,17 @@ Miscellaneous
 
 Core Dump Analysis
 ------------------
-* gdb <program> <corefile>  (or `gdb <program>` followed by `(gdb) core <corefile>`)
-* (gdb) bt  - will give the backtrace (`bt` and `where` are synonymous and give same outputs)
-* As mentioned in [link](https://cxwangyi.wordpress.com/2010/01/08/generate-core-dump-files/),
-  make sure the shell command `ulimit -c unlimited` was executed before the buggy program
-	cored (short for "core-dumped", which is synonymous with "seg-faulted").
+* Loading the debug symbols and core file for examining
+`gdb <program> <corefile>`, or
+`gdb <program>` followed by `(gdb) core <corefile>`, or
+`gdb -c <corefile>` followed by `(gdb) file <program>`
+
+* Getting the back-trace (use ^X-A to switch the layout)
+`(gdb) bt` (`bt` and `where` are synonymous and give same outputs)
+
+* As mentioned in [link](https://cxwangyi.wordpress.com/2010/01/08/generate-core-dump-files/), make sure the shell command `ulimit -c unlimited` was executed before the buggy program cored (short for "core-dumped", which is synonymous with "seg-faulted"). To disable core dump in the current shell, use `ulimit -c 0`.
+
+* Also, see [link](https://stackoverflow.com/a/32461658/10960444), which mentions that `sysctl kernel.core_pattern` can be used for checking the path where core file is dumped.
 
 References
 ----------
