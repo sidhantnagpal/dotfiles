@@ -304,7 +304,7 @@ Network
 tcpdump -i eth0 -Z snagpal port 22 and not host 172.30.247.4 -U -w - | tee filename.$(date +%Y-%m-%d.%Z.%H.%M.%S).pcap | tcpdump -U -n -r -
 ```
 
-`-U` tells tcpdump to use packet buffering for stdout
+`-U` tells tcpdump to use packet buffering for writing
 `-w -` tells tcpdump to write binary data to stdout
 `tee` writes binary data to pcap file and its own stdout
 `-r -` tells tcpdump to read binary data from stdin
