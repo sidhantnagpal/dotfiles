@@ -139,6 +139,9 @@ if has("autocmd")
     " Disable smartindent for python, creates problem typing hash in a newline
     autocmd FileType python setlocal nosmartindent indentkeys-=<:>
 
+    " For c/cpp
+    autocmd BufNewFile,BufFilePre,BufRead *.h,*.c setfiletype cpp
+
     " For go
     autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4 nolist
 
