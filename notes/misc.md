@@ -34,6 +34,7 @@ General
 * `column` [-tns]
 * `which` [-a]
 * `who`, `whoami`
+* `rup`  (displays the status of a remote host by broadcasting on the local network)
 * `type`, `file`, `stat`
 * `true`, `false`
 * `time`
@@ -387,9 +388,10 @@ Utilities
 * `curl`, `wget`
 * `git`
 * `jq`
-* `ssh`, `scp` [-r], `rsync` [-azPL] (with -L sync will happen for the contents of files/directories linked to, rather than the symlink)
+* `ssh`, `scp` [-r], `rsync` [-azPL]
+    - With -L specified in rsync, sync will happen for the contents of files/directories linked to, rather than the symlink
 * `rlwrap` (readline wrapper)
-* `crontab` [-elr], (e -  edit, l - list, r - remove)
+* `crontab` [-elr], (e - edit, l - list, r - remove)
     * for scheduling cron jobs on linux
     * format of cron table entry (DOW stands for Day of Week, 0 = 7 = Sunday):
     ```
