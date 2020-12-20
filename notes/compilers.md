@@ -118,11 +118,22 @@ rpath
 
 C++ Compiler Flags
 ------------------
+- See https://github.com/lefticus/cpp_starter_project/blob/master/cmake/CompilerWarnings.cmake for a good set of warnings to use.
+	- Use `-Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic` for prototyping.
+- Instrumented builds using Sanitizers. See https://github.com/lefticus/cpp_starter_project/blob/master/cmake/Sanitizers.cmake for reference.
+	- To summarize:
+		- AddressSanitizer (ASan), detects addressability issues. (-fsanitize=address)
+		- LeakSanitizer (LSan), detects run-time memory leaks. (-fsanitize=leak)
+		- UndefinedBehaviorSanitizer (UBSan), detects division by zero and other UB. (-fsanitize=undefined)
+		- ThreadSanitizer (TSan), detects race conditions between threads. (-fsanitize=thread) doesn't work with ASan/LSan enabled.
+		- MemorySanitizer (MSan), detects use of uninitialized memory. (-fsanitize=memory) doesn't work with ASan/LSan/TSan enabled.
+	- See https://stackoverflow.com/a/47261999/10960444 for time/memory impact of each of the sanitizers among other pros/cons.
+	- Use `-fsanitize=address,leak,undefined` for prototyping.
 
 * Verbosity (warnings)
 	-Wall : turn on a lot of warnings
-	-Werror : treat warnings as errors
 	-Wextra : turn on additional warnings
+	-Werror : treat warnings as errors
 	-Wpedantic : issue warnings if not compliant to ISO C/C++
 
 * Standard
