@@ -116,6 +116,25 @@ rpath
 	* `patchelf`
 
 
+CMake Build Types
+-----------------
+
+* The default build types that come with cmake more or less mean the following:
+	1. Release: high optimization level, no debug info, code or asserts.
+	2. Debug: No optimization, asserts enabled, [custom debug (output) code enabled],
+	   debug info included in executable (so you can step through the code with a
+	   debugger and have address to source-file:line-number translation).
+	3. RelWithDebInfo: optimized, *with* debug info, but no debug (output) code or asserts.
+	4. MinSizeRel: same as Release but optimizing for size rather than speed.
+
+* In terms of compiler flags that usually means (since these are supported in most cases on all platforms anyway):
+	1. Release: `-O3 -DNDEBUG`
+	2. Debug: `-O0 -g`
+	3. RelWithDebInfo: `-O2 -g -DNDEBUG`
+	4. MinSizeRel: `-Os -DNDEBUG`
+  Where defining NDEBUG is added on platforms that support this (it disables `assert()`).
+
+
 C++ Compiler Flags
 ------------------
 - See https://github.com/lefticus/cpp_starter_project/blob/master/cmake/CompilerWarnings.cmake for a good set of warnings to use.
