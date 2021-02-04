@@ -104,6 +104,7 @@ Git
 * Patch
     - `git apply <patch>`
     - `git apply -R <patch>`
+    - `git apply -3 <path>` (3-way merge, shows conflict markers if any)
 * Pull
     - `git pull --ff-only` (bail out if fast forward not possible)
     - `git pull --rebase` (or `git merge --no-ff`)
@@ -251,6 +252,7 @@ Network
 
 * pcap (packet capture) tools
   - `tcpdump` - limited protocol decoding but available on most nix-systems (native capture format is libpcap aka regular pcap)
+  - `termshark` - interactive CLI-based alternative for wireshark (uses `tshark`)
   - `wireshark` - powerful sniffer which can decode lots of protocols, lots of filters; following tools ship with wireshark:
     * `tshark` : command-line for wireshark (native capture format is libpcap like tcpdump)
     * `rawshark` : dump and analyze raw libpcap data
@@ -290,6 +292,21 @@ Network
         * RST (reset) - aborts a connection in response to an error
         * PSH (push) - asks to push the buffered data to the receiving application
         * URG (urgent) - bypass the queue
+
+* `termshark` [-r]
+```
+    -i=<interfaces> Interface(s) to read.
+    -r=<file> Pcap file to read.
+    -d=<layer type>==<selector>,<decode-as protocol> Specify dissection of layer type.
+    -D Print a list of the interfaces on which termshark can capture.
+    -Y=<displaY filter> Apply display filter.
+    -f=<capture filter> Apply capture filter.
+    -t=<timestamp format>[a|ad|adoy|d|dd|e|r|u|ud|udoy] Set the format of the packet timestamp printed in summary lines.
+```
+    - To read a capture: `termshark -t a -r <pcap>` (absolute) or `termshark -t r -r <pcap>` (relative)
+    - To read a interface: `termshark -i eth0`
+    - Example filter to use:
+    `tcp && (ip.src==10.146.105.171 || ip.dst==10.146.105.171) && (tcp.port eq 20360 || tcp.port eq 40360) && tcp contains SCHLO`
 
 * `wireshark`/`tshark` [-r]
     - for analysis of encrypted traffic from pcap and key
