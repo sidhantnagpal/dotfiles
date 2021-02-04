@@ -84,6 +84,11 @@ Stack
 * info locals - print all local variables
 * info reg - print names and values of registers
 
+Threads
+-------
+* info threads - print existing threads
+* t[hread] <thread-id> - switch among threads
+
 Miscellaneous
 -------------
 * file <program> - load an executable under debugger control
@@ -111,7 +116,7 @@ Core Dump Analysis
 
 Attaching Debugger
 ------------------
-* `gdb <program>` followed by `(gdb) attach <pid>`
+* `gdb` followed by `(gdb) attach <pid>`
 	* With this approach, exiting gdb does not terminate the process.
 
 
