@@ -31,6 +31,8 @@ General
     - `head -10` or `head -n10`  # get first 10 lines
     - `head -n -10`  # get all but last 10 lines
 * `xargs`
+* `diff` [-qs], `cmp`, `vimdiff`
+* `shasum` [-a 256]
 * `column` [-tns]
 * `which` [-a]
 * `who`, `whoami`
