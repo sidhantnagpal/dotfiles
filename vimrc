@@ -106,7 +106,7 @@ endif
 
 set background=dark
 try
-  colorscheme PaperColor " desert, slate, peachpuff, etc.
+  colorscheme PaperColor " desert, slate, peachpuff, solarized, etc.
 catch
 endtry
 

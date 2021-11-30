@@ -20,7 +20,7 @@ Extraction
 
 General
 -------
-* `cat`, `zcat` (on gz files)
+* `cat`, `zcat` (on gz files) (concatenate files and print on standard output)
 * `less`, `zless` (on gz files, less also works)
 * `grep` [-ionErvcC], `zgrep` (r - recursive, v - invert, c - count, C - context of lines, above and below)
 * `tail` [-fFn]
@@ -229,8 +229,45 @@ Network
 
 * `netstat` [-nap]
     - p shows protocol information, for only tcp ports use -t, for only udp ports use -u
-* `socat`
-    * more flexible than `nc` (or `netcat`)
+* `nc` or `ncat` (concatenate and redirect sockets)
+    * protocol options
+        -4 (IPv4 only)
+            Force the use of IPv4 only.
+
+        -6 (IPv6 only)
+            Force the use of IPv6 only.
+
+        -U, --unixsock (Use Unix domain sockets)
+            Use Unix domain sockets rather than network sockets. This option may be used on its own for stream sockets, or combined with
+           --udp for datagram sockets.
+
+        -u, --udp (Use UDP)
+            Use UDP for the connection (the default is TCP).
+
+    * connect mode options
+        -p port, --source-port port (Specify source port)
+        -s host, --source host (Specify source address)
+
+    * listen mode options
+        -l, --listen (Listen for connections)
+            Listen for connections rather than connecting to a remote machine
+
+        -m numconns, --max-conns numconns (Specify maximum number of connections)
+            The maximum number of simultaneous connections accepted by an Ncat instance. 100 is the default (60 on Windows).
+
+        -k, --keep-open (Accept multiple connections)
+
+    * output options
+        -o file, --output file (Save session data)
+        -x file, --hex-dump file (Save session data in hex)
+        --append-output (Append output)
+
+    * misc options
+        --recv-only (Only receive data)
+        --send-only (Only send data)
+
+* `socat` (Socket CAT)
+    * more flexible than `nc` (or `ncat`)
         * more flexible than `telnet`
 * `nslookup` (name server lookup for DNS)
 
