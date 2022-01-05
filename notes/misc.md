@@ -11,7 +11,7 @@ Extraction
     - `tr -d '\r\n'` : delete carriage return and newline chars
     - `tr 'abc' 'xyz'`: replace a with x, b with y, c with z
 * `sort` [-ugnsrm], (u - unqiue, g - float, n - numeric, s - stable, r - reverse, m - merge)
-* `uniq`
+* `uniq` [-c], (c - count)
 * `strings`
 * `tee`
 * `nohup <command> &`
