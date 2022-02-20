@@ -12,7 +12,3 @@
 
 # [remote "origin"]
 # 	fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
-[init]
-	templatedir = ~/.git_template
-[alias]
-	ctags = !.git/hooks/ctags

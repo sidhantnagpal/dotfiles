@@ -56,6 +56,9 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 				- History/ (search history)
 				- History (closed buffer history)
 		- NERDTree
+		  ```
+			$ git clone https://github.com/preservim/nerdtree.git ~/.vim/bundle/nerdtree
+			```
 
 * fzf (fuzzy finder)
 	```
@@ -80,6 +83,12 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	$ curl https://sh.rustup.rs -sSf | sh # install rust & cargo
 	$ cargo install ripgrep
 	$ strip ~/.cargo/bin/rg # remove debug symbols from the binary
+	```
+
+	or
+
+	```
+	$ sudo apt install ripgrep
 	```
 
 	refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
