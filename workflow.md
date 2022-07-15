@@ -20,7 +20,7 @@ Complete Setup Steps [ssh, bash, tmux, git, vim]
 
 * vim
 	- copy `~/.vimrc`
-	- copy `~/.vim` folder (including `colors` and `bundle` for themes and plugins respectively)
+	- copy `~/.vim/colors` folder (including `colors` and `bundle` for themes and plugins respectively)
 		- prefer to use iTerm2 with background color #1c1c1c and Vim with PaperColor theme
 	- plugins
 		- pathogen
