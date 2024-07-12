@@ -199,7 +199,7 @@ map <c-p> :setl paste! paste?<CR>
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gp :Gpush<CR>
 nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gb :Git blame<CR>
 nnoremap <leader>gd :Gvdiffsplit<space>
 
 
