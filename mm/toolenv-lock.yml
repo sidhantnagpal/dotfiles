@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: b98966bab63fac6b703cdb6885f6b392891d2d8276ac9768a6e4607120ea7a77
+    linux-64: 8160baf8e7dce6137d68b4803927eafd4d5efeeeeff15bae130e374f2aa0cc03
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -1075,6 +1075,21 @@ package:
     sha256: c96724c8ae4ee61af7674c5d9e5a3fbcf6cd887a40ad5a52c99aa36f1d4f9680
   category: main
   optional: false
+- name: libhwloc
+  version: 2.11.1
+  manager: conda
+  platform: linux-64
+  dependencies:
+    __glibc: '>=2.17,<3.0.a0'
+    libgcc-ng: '>=12'
+    libstdcxx-ng: '>=12'
+    libxml2: '>=2.12.7,<3.0a0'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libhwloc-2.11.1-default_hecaa2ac_1000.conda
+  hash:
+    md5: f54aeebefb5c5ff84eca4fb05ca8aa3a
+    sha256: 8473a300e10b79557ce0ac81602506b47146aff3df4cc3568147a7dd07f480a2
+  category: main
+  optional: false
 - name: libiconv
   version: '1.17'
   manager: conda
@@ -1280,6 +1295,38 @@ package:
   hash:
     md5: 80b79ce0d3dc127e96002dfdcec0a2a5
     sha256: 5c88cd6e19437015de16bde30dd25791aca63ac9cbb8d66b65f365ecff1b235b
+  category: main
+  optional: false
+- name: mimalloc
+  version: 2.1.7
+  manager: conda
+  platform: linux-64
+  dependencies:
+    libgcc-ng: '>=12'
+    libstdcxx-ng: '>=12'
+  url: https://conda.anaconda.org/conda-forge/linux-64/mimalloc-2.1.7-hac33072_0.conda
+  hash:
+    md5: 96cfdadf13670fc9f8e95eba441a2701
+    sha256: 2d674ce23c782dc5911a0681442d137ca0fed357ad8c86d7d4299be5982c9068
+  category: main
+  optional: false
+- name: mold
+  version: 2.34.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    __glibc: '>=2.17,<3.0.a0'
+    libgcc: '>=13'
+    libstdcxx: '>=13'
+    libzlib: '>=1.3.1,<2.0a0'
+    mimalloc: '>=2.1.7,<2.1.8.0a0'
+    openssl: '>=3.3.2,<4.0a0'
+    tbb: '>=2021.13.0'
+    zstd: '>=1.5.6,<1.6.0a0'
+  url: https://conda.anaconda.org/conda-forge/linux-64/mold-2.34.0-hc93959d_0.conda
+  hash:
+    md5: e92d2f5fbd13e672c7740619d441dd4f
+    sha256: 4551593ae130394649c21f25bb780b902df63a7196367bc29d9f2cf391b76e32
   category: main
   optional: false
 - name: more-itertools
@@ -1751,6 +1798,21 @@ package:
   hash:
     md5: f58cb23983633068700a756f0b5f165a
     sha256: 5629b0e93c8e9fb9152de46e244d32ff58184b2cbf0f67757826a9610f3d1a21
+  category: main
+  optional: false
+- name: tbb
+  version: 2021.13.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    __glibc: '>=2.17,<3.0.a0'
+    libgcc: '>=13'
+    libhwloc: '>=2.11.1,<2.11.2.0a0'
+    libstdcxx: '>=13'
+  url: https://conda.anaconda.org/conda-forge/linux-64/tbb-2021.13.0-h84d6215_0.conda
+  hash:
+    md5: ee6f7fd1e76061ef1fa307d41fa86a96
+    sha256: 7d4d3ad608dc6ae5a7e0f431f784985398a18bcde2ba3ce19cc32f61e2defd98
   category: main
   optional: false
 - name: tk

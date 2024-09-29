@@ -1,7 +1,9 @@
 " load plugins
 execute pathogen#infect()
 call pathogen#helptags()
-set rtp+=~/.fzf
+
+" `:echo &rtp` from vim to verify runtime path addition
+let &rtp.=','.expand("$MAMBA_ROOT_PREFIX/envs/toolenv/share/fzf")
 
 set nocompatible                  " be iMproved, required first
 
@@ -36,6 +38,8 @@ set nobackup                      " Don't use backup file (*.ext~)
 set nowritebackup                 " Don't create temporary backups while saving files
 set noundofile                    " Don't use persistent-undo files
 set display+=lastline             " Show as much of lastline as possible instead of @
+
+set clipboard=exclude:.*          " Vim 9.1+ speedup (https://stackoverflow.com/a/17719528)
 
 " Better Completion
 set complete=.,w,b,u,t
@@ -196,32 +200,101 @@ map <c-p> :setl paste! paste?<CR>
 
 
 " ================ vim-fugitive ===============
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gp :Gpush<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gb :Git blame<CR>
+" :h fugitive   for help
+nnoremap <leader>gp :Git push
+" :G<CR>        for git status;
+"               g? for staging/unstaging maps
+"                   move cursor to file and
+"                       press 's' for stage
+"                       press 'u' for unstage
+"                       press '=' for inline diff
+"                       press 'o' to open file in another split (use :q to
+"                           quit specific window (represents viewport to a buffer),
+"                           using :bd deletes buffer (represents open file) from
+"                           buffer list effectively closing all windows.)
+"                       press 'I' for git add -p (on staged file) or
+"                           git reset -p (on unstaged file)
+"
+"               c? for commit maps
+"                   move cursor to commit and
+"                       press 'ca' for commit ammend
+"                       press 'coo' to checkout to the commit under cursor
+"                       press 'c<space>' for :Git commit<space>
+"                       press 'co<space>' for :Git checkout<space>
+"                       press 'cr<space>' for :Git revert<space>
+"                       press 'cm<space>' for :Git merge<space>
+"                       press 'crc' to revert the commit under cursor
+"                       press 'crn' same as crc but dont actually commit
+"
+"               cz? for stash maps
+"                       press 'cz<space>' for :Git stash<space>
+"
+"               r? for rebase maps
+"                       press 'ri' for interactive rebase (on the commit under cursor)
+"                       press 'ra' for abort the current rebase
+"
+" :G log        for git log
+" :G blame      for git blame
+" :Gw           for write, git add
+" :Gwq          for write, git add, quit if successful (similarly, Gwq! iykyk)
+" :Gr           for :Git read, similar to git checkout -- filename,
+"                   but does not write anything to disk, which means,
+"                   you can do 'u' (undo) to redo the changes.
+
 nnoremap <leader>gd :Gvdiffsplit<space>
+" with
+"   (no args) <CR> it shows the dirty diff (current vs staged)
+"   HEAD <CR>      it shows the diff of current (unstaged+staged) from HEAD
+"   HEAD~3:% <CR>  it shows the diff of current (unstaged+staged) from 3 commits ago
+" from current version to 3 commits ago
+
+" set status line to include git branch (if version controlled)
+set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
 
 
 " ==================== fzf ====================
-"let g:fzf_layout = { 'down': '~70%' }
-let g:fzf_layout = { 'window': 'enew' }
-nnoremap <leader>r/ :Rg<CR>
-nnoremap <leader>l/ :Lines<CR>
-nnoremap <leader>/ :BLines<CR>
-nnoremap <leader>c :BCommits<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>w :Windows<CR>
-nnoremap <leader>f :Files<CR>
-nnoremap <leader>gf :GFiles<CR>
-nnoremap <leader>h :Hist
+if executable('tmux')
+  let g:fzf_layout = { 'tmux': '90%,70%' }
+else
+  let g:fzf_layout = { 'window': 'enew' }
+endif
+
+" for grepping all file(s) lines
+nnoremap <leader>g/  :Rg<CR>
+" for grepping git ls-file(s) lines
+nnoremap <leader>gg/ :Rgg<CR>
+" for open file(s) lines
+nnoremap <leader>l/  :Lines<CR>
+" for current file lines
+nnoremap <leader>/   :BLines<CR>
+" for current file commits
+nnoremap <leader>c   :BCommits<CR>
+" for old/open files
+nnoremap <leader>h   :History<CR>
+" for open files
+nnoremap <leader>b   :Buffers<CR>
+" for all files
+nnoremap <leader>f   :Files<CR>
+" for git ls-files
+nnoremap <leader>gf  :GFiles<CR>
+" for git status
+nnoremap <leader>gs  :GFiles?<CR>
+
 
 if executable('rg')
-    set grepprg=rg\ --color=never
-    let $FZF_DEFAULT_COMMAND='rg --files -g "" --hidden'
+  " Use ripgrep for :grep
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
+
+  command! -bang -nargs=* Rgg
+    \ call fzf#vim#grep(
+    \   'git ls-files -z | xargs -0 rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>),
+    \   1,
+    \   fzf#vim#with_preview(),
+    \   <bang>0)
+
 elseif executable('ag')
-    set grepprg=ag\ --nocolor
-    let $FZF_DEFAULT_COMMAND='ag -g "" --hidden'
+  " Use ag for :grep
+  set grepprg=ag\ --vimgrep\ --nogroup\ --nocolor\ --hidden\ --smart-case
 endif
 
 
@@ -240,11 +313,39 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 "==================== TermDebug ====================
 if v:version >= 801
-  packadd termdebug  " ensure gdb >= 7.12
+  packadd! termdebug  " ensure gdb >= 7.12
 
   " For widescreen code viewing
-  let g:termdebug_wide=1
+  let g:termdebugger_layout='vertical'
 
   " Add mapping to load termdebug
   noremap <silent> <leader>td :Termdebug<CR>
 endif
+
+"==================== Copilot ====================
+let g:copilot_enabled=0
+
+"==================== ALE ====================
+
+" Enable Asynchronous Linting Engine
+let g:ale_enabled = 1
+
+" Set clang-tidy as the only linter for C and C++
+let g:ale_linters = {
+    \ 'cpp': ['clangtidy'],
+    \ 'c': ['clangtidy'],
+    \ }
+
+" Disable fixers for C and C++ (optional)
+let g:ale_fixers = {
+    \ 'cpp': [],
+    \ 'c': [],
+    \ }
+
+" Customize clang-tidy options (optional)
+let g:ale_clangtidy_options = '-checks=*,-clang-analyzer-alpha.*'
+
+" Set when to lint
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'always'

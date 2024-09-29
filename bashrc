@@ -1,16 +1,3 @@
-
-########### BASH PROFILE, BASHRC resolve ###########
-# if .bash_profile exists, add
-# if [ -f ~/.bashrc ]; then
-# 	source ~/.bashrc
-# fi
-
-########### CONDA env for BASH PROMPT ###########
-# run `conda init` so that bash prompt shows conda environment
-# `conda config --show | grep auto_activate_base` # check if it is True
-# `conda config --set auto_activate_base False` # set to False
-
-
 ########### BASH PROMPT ###########
 prompt_git() {
         local s=''
@@ -50,7 +37,6 @@ prompt_git() {
         echo -e " ${s}(${branchName})"
 }
 
-export PATH=$(brew --prefix)/bin:$(brew --prefix)/sbin:$PATH
 export PROMPT_DIRTRIM=2
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
@@ -59,12 +45,41 @@ else
 fi
 PS1="$PS1\$(prompt_git)$ "
 
+
 ####### Prevent BYTECODE generation by Python Interpreter #######
 export PYTHONDONTWRITEBYTECODE=1
 
-####### Requires rg/ag and fzf ########
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'micromamba shell init' !!
+export MAMBA_EXE="$HOME/.local/bin/micromamba";
+export MAMBA_ROOT_PREFIX="$HOME/micromamba";
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell bash --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias micromamba="$MAMBA_EXE"  # Fallback on help from micromamba activate
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+
+##### For micromamba and toolenv ######
+alias mm=micromamba
+
+# Append 'toolenv' bin to PATH (if it isnt already added).
+# The trailing forward slash after bin/ is intentional to
+# retain it in PATH even after toolenv is deactivated.
+# This is needed because env activation adds a new entry
+# without forward slash for bin in PATH and deactivation
+# removes all entries without forward slash.
+TOOLENV_PATH="$MAMBA_ROOT_PREFIX/envs/toolenv/bin"
+if [[ ":$PATH:" != *":$TOOLENV_PATH:"* ]]; then
+    export PATH="$TOOLENV_PATH:$PATH"
+fi
+unset TOOLENV_PATH
+
+
+####### Requires rg/ag and fzf ########
 _has() {
   return $(type $1 &>/dev/null)
 }
@@ -79,19 +94,32 @@ if _has fzf; then
     SEARCH_PREFIX='ag --skip-vcs-ignores --hidden --ignore-dir={.git,node_modules}'
     FSEARCH_SUFFIX='-g "" 2>/dev/null'
   fi
+
   export FZF_DEFAULT_COMMAND="$SEARCH_PREFIX $FSEARCH_SUFFIX"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+  # setup shell bindings for fzf
+  eval "$(fzf --bash)"
+
   # Nice little trick, without argument tries to locate the filename, with argument
-  #         searches for the pattern in filecontents (and then for the filename)
+  #         searches for the pattern in filecontents (and then for the filename).
+  #	    Doesn't need fzf.vim plugin!
   vimrg() {
     vim $(eval "$SEARCH_PREFIX --smart-case -l \"${@:-}\" | fzf --preview 'cat {}'")
   }
   # If more filecontent oriented search is required,
   #   use `vim -c "Rg"` or `vim -c "Ag"`, which is equivalent
-  #   to opening vim and then executing the commands `:Rg` / `:Ag`
-  #   shorthand: `vi -cRg`
+  #   to opening vim and then executing the commands `:Rg` / `:Ag`.
+  #   Shorthand: `vi -cRg`. These do need fzf.vim plugin!
+
+  unset SEARCH_PREFIX
+  unset FSEARCH_SUFFIX
 fi
 
-# enable passphrase prompt for gpg
-export GPG_TTY=$(tty)
+if _has rg; then
+  rgg() {
+    git ls-files -z | xargs -0 rg "$@"
+  }
+fi
+
+unset -f _has

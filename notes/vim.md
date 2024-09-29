@@ -130,8 +130,17 @@ in fact:
 :reg 0 - get contents of register 0
 :reg a - get contents of register a
 
+:oldfiles - to see a list of files previously edited
+:e #<91 - to edit 91st entry in that list
+
 ctrl+w and arrow keys - move cursor to another window
 ctrl+e/y - move viewport up/down
+
+ctrl+w | - maximize window width
+ctrl+w _ - maximize window height
+z1<CR>	 - minimize window height
+ctrl+w = - restore window sizes
+
 
 vi 1976
  | \      more 1978
@@ -146,7 +155,8 @@ vim is vi improved, so add `alias vi=vim` in `.bashrc` file
 
 
 Useful vim plugins:
-1. pathogen
-2. Fugitive
-3. fzf.vim
-4. NERDTree
+1. pathogen (plugin support)
+2. Fugitive (git integration)
+3. fzf.vim (fuzzy finger integration)
+4. NERDTree (file tree integration)
+5. ALE (linting integration)
