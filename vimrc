@@ -215,6 +215,10 @@ nnoremap <leader>gp :Git push
 "                       press 'I' for git add -p (on staged file) or
 "                           git reset -p (on unstaged file)
 "
+"               d? for diff maps
+"                   move cursor to stage/unstaged file and
+"                       press 'dv' for :Gvdiffsplit view
+"
 "               c? for commit maps
 "                   move cursor to commit and
 "                       press 'ca' for commit ammend

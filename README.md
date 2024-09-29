@@ -28,7 +28,7 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 	$ mm create -n toolenv
 	$ mm activate toolenv
 	$ echo $CONDA_PREIX # for adding to PATH later
-	$ mm install conda-lock tmux vim fzf ripgrep git clang-tools mold gdb rust
+	$ mm install conda-lock tmux xclip vim fzf ripgrep git clang-tools mold gdb rust
 	$ mm deactivate
 	```
 
