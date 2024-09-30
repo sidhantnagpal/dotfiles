@@ -101,16 +101,15 @@ if _has fzf; then
   # setup shell bindings for fzf
   eval "$(fzf --bash)"
 
-  # Nice little trick, without argument tries to locate the filename, with argument
-  #         searches for the pattern in filecontents (and then for the filename).
-  #	    Doesn't need fzf.vim plugin!
-  vimrg() {
-    vim $(eval "$SEARCH_PREFIX --smart-case -l \"${@:-}\" | fzf --preview 'cat {}'")
-  }
-  # If more filecontent oriented search is required,
+  # If file content (or name) oriented search is required,
   #   use `vim -c "Rg"` or `vim -c "Ag"`, which is equivalent
   #   to opening vim and then executing the commands `:Rg` / `:Ag`.
-  #   Shorthand: `vi -cRg`. These do need fzf.vim plugin!
+  #   Shorthand: `vi -cRg`. These need fzf.vim plugin!
+
+  # vim global search alias - open vim with fuzzy search filename/content
+  alias vig='vim -cRg'   # equivalent to doing vim + leader key + g
+  # vim history alias - open vim with fuzzy search "recently opened files"
+  alias vih='vim -cHist' # equivalent to doing vim + leader key + h
 
   unset SEARCH_PREFIX
   unset FSEARCH_SUFFIX

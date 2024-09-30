@@ -87,17 +87,16 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 			$ git clone https://github.com/tpope/vim-fugitive.git ~/.vim/bundle/vim-fugitive
 			```
 			* features
-				- G (or Gstatus)
-				- Gdiffsplit
+				- G (for git status)
 				- Gblame
-				- G{commit, push, pull, rebase, merge}
+				- G {commit, push, pull, rebase, merge, etc.}
 		- fzf.vim
 			```
 			git clone https://github.com/junegunn/fzf.vim.git ~/.vim/bundle/fzf.vim
 			```
 
 			* Set vim's `rtp` appropriately to detect fzf.vim plugin from fzf installation.
-				reference - https://github.com/junegunn/fzf/blob/master/README-VIM.md for reference
+				reference - https://github.com/junegunn/fzf/blob/master/README-VIM.md
 			* features
 				- Files (search files recursively)
 				- Lines (search lines in open buffers)
@@ -114,6 +113,7 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 		  ```
 			$ git clone https://github.com/preservim/nerdtree.git ~/.vim/bundle/nerdtree
 			```
+		- TermDebug [optional]
 		- Copilot [optional]
 		- ALE [optional]
 			- Async Linting Engine: use clang-tidy for c/cpp files
