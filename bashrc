@@ -122,3 +122,6 @@ if _has rg; then
 fi
 
 unset -f _has
+
+# be IMproved
+alias vi=vim

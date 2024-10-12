@@ -7,8 +7,6 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 	- setup identity (use it for git to do password-less auth)
 
 * bashrc
-	- modify bash prompt to add git branch and conda env support
-	- also add vimrg function, vi -> vim alias if needed
 
 * micromamba
 	- https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html#automatic-install
@@ -28,7 +26,7 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 	$ mm create -n toolenv
 	$ mm activate toolenv
 	$ echo $CONDA_PREIX # for adding to PATH later
-	$ mm install conda-lock tmux xclip vim fzf ripgrep git clang-tools mold gdb rust
+	$ mm install conda-lock tmux xclip vim fzf ripgrep git clang-tools clangxx mold lld gdb rust
 	$ mm deactivate
 	```
 
@@ -54,6 +52,19 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 
 * gdb
 	- copy `~/.gdbinit`
+
+* clang++/mold
+	- clang++ -std=c++20 -O3 -o main main.cpp -o main
+	[Points to note]
+	- Compiler choice (clang++ or clang)
+		* `clang++` if not available, can be substituted with `clang -x c++ -lstdc++`. Installing clangxx from conda-forge should get you clangxx, clang, clang-19, libstdcxx.
+	- Linker choice (mold > lld by LLVM > gold by GNU > ld by GNU; from performance perspective)
+		* The default linker available on linux would be used when executing the above command (most likely, ld, by GNU).
+		*	If you are looking to use lld (by LLVM), you can add:
+			`-fuse-ld=lld --sysroot=$MAMBA_ROOT_PREIX/envs/toolenv/x86_64-conda-linux-gnu/sysroot`
+		* If you are looking to use mold, you can add:
+			`-fuse-ld=mold --sysroot=$MAMBA_ROOT_PREFIX/envs/toolenv/x86_64-conda-linux-gnu/sysroot`
+
 
 * rg (ripgrep)
 	refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
