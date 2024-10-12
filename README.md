@@ -55,6 +55,8 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 
 * clang++/mold
 	- clang++ -std=c++20 -O3 -o main main.cpp -o main
+
+	<br/>
 	[Points to note]
 	- Compiler choice (clang++ or clang)
 		* `clang++` if not available, can be substituted with `clang -x c++ -lstdc++`. Installing clangxx from conda-forge should get you clangxx, clang, clang-19, libstdcxx.
@@ -65,6 +67,22 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 		* If you are looking to use mold, you can add:
 			`-fuse-ld=mold --sysroot=$MAMBA_ROOT_PREFIX/envs/toolenv/x86_64-conda-linux-gnu/sysroot`
 
+	<br/>
+	[Using several compilers via conda/mamba environments]
+	- The Problem:
+		- If you compiled the program using a newer version of GCC/Clang, which links against a newer version of libstdc++, but you are running it on a system that has an older version of the library, you may see:
+		```
+		./main: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by ./main)
+		```
+ - The Solution:
+	1. Statically linking the standard library (-static-libstdc++ -static-libgcc) when compiling your program. Note static linking produces a larger executable than dynamic linking as it has to compile all code into a single executable. There are trade-offs in deciding whether to link statically or dynamically (generally preferred) - the former for ease of deployment with no external dependencies; the latter for reaping benefits when shared libraries are upgraded, as the binary doesn't have to be recompiled.
+	2. By specifying rpath (or runpath or runtime library search path) at compile time.
+	`-Wl,-rpath,/path/to/your/libs` or `-Wl,-rpath,/path/to/lib1,-rpath,/path/to/lib2` (for multiple paths)
+	(That is, compile your program like `clang++ -std=c++20 -O3 -Wl,-rpath,$MAMBA_ROOT_PREFIX/envs/toolenv/lib main.cpp -o main`)
+	3. By modifying rpath on the binary (after compilation).
+	`patchelf --set-rpath /path/to/your/libs ./main`
+	To view the current rpath on the binary, you may use `readelf -d ./main | grep "rpath"` (or see them in `ldd ./main`).
+	(You can think this is how conda/mamba environment libs get used as rpath: `patchelf --set-rpath $CONDA_PREFIX/lib ./main`).
 
 * rg (ripgrep)
 	refer: http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before/
