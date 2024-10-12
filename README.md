@@ -58,6 +58,8 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 
 	<br/>
 	[Points to note]
+	<br/>
+ 
 	- Compiler choice (clang++ or clang)
 		* `clang++` if not available, can be substituted with `clang -x c++ -lstdc++`. Installing clangxx from conda-forge should get you clangxx, clang, clang-19, libstdcxx.
 	- Linker choice (mold > lld by LLVM > gold by GNU > ld by GNU; from performance perspective)
@@ -69,12 +71,14 @@ Setup Steps [bash, ssh, tools (like git, rg, tmux, fzf, vim etc)]
 
 	<br/>
 	[Using several compilers via conda/mamba environments]
+	<br/>
+ 
 	- The Problem:
 		- If you compiled the program using a newer version of GCC/Clang, which links against a newer version of libstdc++, but you are running it on a system that has an older version of the library, you may see:
 		```
 		./main: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by ./main)
 		```
- - The Solution:
+ 	- The Solution:
 	1. Statically linking the standard library (-static-libstdc++ -static-libgcc) when compiling your program. Note static linking produces a larger executable than dynamic linking as it has to compile all code into a single executable. There are trade-offs in deciding whether to link statically or dynamically (generally preferred) - the former for ease of deployment with no external dependencies; the latter for reaping benefits when shared libraries are upgraded, as the binary doesn't have to be recompiled.
 	2. By specifying rpath (or runpath or runtime library search path) at compile time.
 	`-Wl,-rpath,/path/to/your/libs` or `-Wl,-rpath,/path/to/lib1,-rpath,/path/to/lib2` (for multiple paths)
